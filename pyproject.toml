@@ -1,0 +1,27 @@
+[tool.poetry]
+#Project name ("hexlet_code" - for Edu purposes, "n8creator_page_loader"
+#for PyPi Publishing
+#name = "hexlet_code"
+name = "n8creator_page_loader"
+
+version = "0.1.0"
+description = ""
+authors = ["n8creator <n8creator@pm.me>"]
+packages = [
+  { include = "page_loader" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.25.1"
+requests-mock = "^1.8.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+
+[tool.poetry.scripts]
+page_loader = "page_loader.scripts.page_loader:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
