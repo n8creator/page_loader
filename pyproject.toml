@@ -1,9 +1,5 @@
 [tool.poetry]
-#Project name ("hexlet_code" - for Edu purposes, "n8creator_page_loader"
-#for PyPi Publishing
-#name = "hexlet_code"
-name = "n8creator_page_loader"
-
+name = "hexlet_code"
 version = "0.1.0"
 description = ""
 authors = ["n8creator <n8creator@pm.me>"]
