@@ -90,7 +90,13 @@ def get_filepath(url, local_path=None):
         [str]: absolute path to local file
     """
     if local_path:
+        # Remove slash from the end of file
+        if local_path[-1:] == '/':
+            local_path = local_path[0:-1]
+
+        # Generate output string
         file_path = str(local_path) + '/' + str(url_to_filename(url))
+
     else:
         file_path = str(url_to_filename(url))
 
