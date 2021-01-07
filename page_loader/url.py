@@ -76,3 +76,22 @@ def url_to_filename(url):
         [str]: filename, like: "python-org-3-library-exceptions.html"
     """
     return str(convert_url(url) + '.html')
+
+
+def get_filepath(url, local_path=None):
+    """Generate absolute file_path on local machine.
+
+    Args:
+        url ([str]): url, like "https://python.org/3/library/exceptions.html"
+        local_path ([str], optional): local path, like: "/var/tmp".
+                                      Defaults to None.
+
+    Returns:
+        [str]: absolute path to local file
+    """
+    if local_path:
+        file_path = str(local_path) + '/' + str(url_to_filename(url))
+    else:
+        file_path = str(url_to_filename(url))
+
+    return file_path

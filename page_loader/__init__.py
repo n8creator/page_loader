@@ -1,5 +1,5 @@
 """Module downloading HTML content from specified URL into file."""
-from page_loader.url import url_to_filename
+from page_loader.url import get_filepath
 from page_loader.loader import get_html
 from page_loader.saver import save_file
 
@@ -11,16 +11,15 @@ def download(url, local_path):
         url ([str]): url, like "https://python.org/3/library/exceptions.html"
         local_path ([str]): local path, like: "/var/tmp"
     """
-    # Get filename & generate filepath to save data
-    file_name = url_to_filename(url)
-    save_path = str(local_path + '/' + file_name)
+    # Generate file_path to save data
+    file_path = get_filepath(url=url, local_path=local_path)
 
     # # Get HTML data from URL
     html = get_html(url)
 
     # Save parsed data into file
     try:
-        save_file(data=html, local_path=save_path)
-        return(save_path)
+        save_file(data=html, local_path=file_path)
+        return(file_path)
     except Exception as err:
         print('An error occurred:' + str(err))
