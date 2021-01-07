@@ -1,4 +1,4 @@
-"""Module converting URL into readable string."""
+"""Module converting URL into readable string or filename."""
 from urllib.parse import urlparse
 import re
 
@@ -7,10 +7,12 @@ def replace_chars(s):
     """Replace chars to hyphens.
 
     Args:
-        s ([str]): string containing some chars
+        s ([str]): string containing some chars, like:
+                   "https://python.org/3/library/exceptions.html"
 
     Returns:
-        [str]: string with chars replaced to hyphens
+        [str]: string with chars replaced to hyphens, like:
+               "https-python-org-3-library-exceptions-html"
     """
     # Replace all chars to hyphens
     s = re.sub(r"[^A-Za-z0-9]", '-', s)
@@ -25,13 +27,15 @@ def replace_chars(s):
 
 
 def remove_html(s):
-    """Remove unnecessary `html` from the end of line
+    """Remove unnecessary `html` from the end of line.
 
     Args:
-        s ([str]): some string that may contain `html` in the end of line
+        s ([str]): some string that may contain `html` in the end of line,
+                   like: "https-python-org-3-library-exceptions-html"
 
     Returns:
-        [str]: string without `html` in the end of line
+        [str]: string without `html` in the end of line, like:
+               "https-python-org-3-library-exceptions"
     """
     if re.search(r"\-?html$", s) is not None:
         return re.sub(r'\-?html$', '', s)
@@ -43,10 +47,11 @@ def convert_url(url):
     """Convert URL into readable string without unnescessary chars & elements.
 
     Args:
-        url ([str]):
+        url ([str]): url, like "https://python.org/3/library/exceptions.html"
 
     Returns:
-        [type]: [description]
+        [type]: string containing URL netloc and path without any chars &
+                unnecessary elements, like: "python-org-3-library-exceptions"
     """
     output = ''
 
@@ -59,3 +64,15 @@ def convert_url(url):
         output += p.path
 
     return remove_html(replace_chars(output))
+
+
+def url_to_filename(url):
+    """Convert URL into filename which may be saved on disk.
+
+    Args:
+        url ([str]): url, like "https://python.org/3/library/exceptions.html"
+
+    Returns:
+        [str]: filename, like: "python-org-3-library-exceptions.html"
+    """
+    return str(convert_url(url) + '.html')
