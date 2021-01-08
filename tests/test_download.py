@@ -12,7 +12,7 @@ import os
     ('https://www.finanz.ru/'),
     ('https://vc.ru/'),
     ])
-def test_file_existance(url):
+def test_download(url):
     with tempfile.TemporaryDirectory() as temp_dir:
         # Generate file_name from given URL
         file_name = url_to_filename(url)
