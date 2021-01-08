@@ -19,5 +19,5 @@ from page_loader.url import get_filepath
      '/var/temp/',
      '/var/temp/ru-hexlet-io-projects-50-members-11333-mentor.html'),
     ])
-def test_local_paths(url, local_path, output):
+def test_filepaths(url, local_path, output):
     assert output == get_filepath(url, local_path)
