@@ -16,6 +16,5 @@ def test_requests(requests_mock, fixture):
     with open(data_file, 'r') as f:
         data = f.read()
 
-    print(data)
     requests_mock.get('https://ru.hexlet.io/courses', text=data)
     assert data == requests.get('https://ru.hexlet.io/courses').text

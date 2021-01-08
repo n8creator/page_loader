@@ -3,7 +3,7 @@ import argparse
 import os
 
 
-def get_args():
+def get_args(argv=None):
     """Function Returning Arguments Entered By The User.
 
     Returns:
@@ -15,5 +15,8 @@ def get_args():
                         help='specify local path on your system to save output\
                               or leave it blank to save in current directory')
     parser.add_argument('URL')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     return args
+
+
+# print(get_args(['https://vc.ru/']))
