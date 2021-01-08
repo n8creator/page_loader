@@ -4,7 +4,7 @@ import os
 
 
 @pytest.mark.parametrize('fixture', [
-    ('ru-hexlet-io-courses.html'),
+    ('ru-hexlet-io-professions.html'),
     ])
 def test_requests(requests_mock, fixture):
 
@@ -16,5 +16,5 @@ def test_requests(requests_mock, fixture):
     with open(data_file, 'r') as f:
         data = f.read()
 
-    requests_mock.get('https://ru.hexlet.io/courses', text=data)
-    assert data == requests.get('https://ru.hexlet.io/courses').text
+    requests_mock.get('https://ru.hexlet.io/professions', text=data)
+    assert data == requests.get('https://ru.hexlet.io/professions').text
