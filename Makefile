@@ -17,12 +17,10 @@ package-install:
 	pip install dist/*.whl
 	# pip install --user dist/*.whl
 
-
 dev-upgrade:
+	rm -rf dist/*
+	make build
 	pip install dist/*.whl --upgrade
-
-
-
 
 loader:
 	poetry run page_loader
