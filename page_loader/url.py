@@ -43,6 +43,18 @@ def remove_html(s):
         return s
 
 
+def get_netloc(url):
+    """Function returns netloc from url
+
+    Args:
+        url ([str]): some url
+
+    Returns:
+        [str, None]: netloc, i.e. domain name with subdomains
+    """
+    return urlparse(url).netloc if urlparse(url).netloc else None
+
+
 def convert_url(url):
     """Convert URL into readable string without unnescessary chars & elements.
 
