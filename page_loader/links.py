@@ -78,13 +78,3 @@ def filter_links(links: list, url: str):
 
     # Return list of filtered local links
     return list(filtered)
-
-
-if __name__ == "__main__":
-    print(filter_links(['assets/application.css',
-                        '/assets/favicon.ico',
-                        'https://ru.hexlet.io/professions',
-                        'https://en.hexlet.io/professions',
-                        'https://js.stripe.com/v3/'],
-                       'https://ru.hexlet.io/professions'))
-
