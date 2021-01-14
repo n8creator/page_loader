@@ -3,6 +3,7 @@ from page_loader.cli import get_args
 import os
 
 
+# Test get_args() function
 @pytest.mark.parametrize('url, option, output', [
     ('https://ru.hexlet.io/professions', '-o', os.getcwd()),
     ('https://vc.ru/', '--output', '/var/tmp'),

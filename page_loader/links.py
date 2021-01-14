@@ -1,8 +1,8 @@
 from page_loader.path import parse_url
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 
 
-def get_links(tag, attr, soup):
+def parse_links(tag, attr, soup):
     """Get list of links from HTML page (for specified tag and attribute).
 
     Args:
@@ -26,6 +26,18 @@ def get_links(tag, attr, soup):
 
     # Return list of links
     return links
+
+
+def remove_duplicates(data: list) -> list:
+    """Remove duplicates from the list.
+
+    Args:
+        data (list): some list that main contain duplicates
+
+    Returns:
+        list: output list without duplicates
+    """
+    return list(dict.fromkeys(data))
 
 
 def filter_links(links: list, url: str):
@@ -77,4 +89,43 @@ def filter_links(links: list, url: str):
                    filtered)
 
     # Return list of filtered local links
-    return list(filtered)
+    return remove_duplicates(filtered)
+
+
+def get_list_of_links(tag_meta: dict, url: str, soup) -> list:
+    """Generate full list of links to parse & replace.
+
+    Args:
+        tag_dict (dict): dict containing tags and meta-tags to process, like:
+                        {'img': 'src', 'link': 'href', 'script': 'src'}
+        url (str): page url
+        soup ([type]): BeautifulSoup object containing HTML-code
+
+    Returns:
+        list: filtered list of local links with tags, like:
+             '('/rynok-situatsiya-v-momente-23/', 'link')'
+    """
+    links = []
+    for tag, attr in tag_meta.items():
+        local_links = filter_links(links=parse_links(tag=tag,
+                                                     attr=attr,
+                                                     soup=soup),
+                                   url=url)
+        for link in local_links:
+            links.append((link, tag))
+    return links
+
+
+def get_full_link(page_url: str, link: str) -> str:
+
+    url = parse_url(page_url)
+    lnk = parse_url(link)
+
+    scheme = url['scheme']
+    netloc = url['netloc']
+    path = lnk['path']
+    params = lnk['params']
+    query = lnk['query']
+    fragment = lnk['fragment']
+
+    return urlunparse([scheme, netloc, path, params, query, fragment])

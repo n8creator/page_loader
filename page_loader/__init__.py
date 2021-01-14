@@ -1,9 +1,9 @@
 """Module downloading HTML content from specified URL into file."""
-from page_loader.url import get_filepath, get_netloc
-from page_loader.loader import get_html
-from page_loader.file import save_file, read_file
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from page_loader.path import get_filename, get_foldername, guess_ext
+from page_loader.loader import load_content, load_single_asset
+from page_loader.links import get_list_of_links, get_full_link
+from page_loader.file import create_dir
 
 ASSET_TAGS = {
     'img': 'src',
@@ -12,119 +12,39 @@ ASSET_TAGS = {
 }
 
 
-def download(url, local_path):
+def download(page_url, local_path):
     """Download data from specified URL & save it into file.
 
     Args:
         url ([str]): url, like "https://python.org/3/library/exceptions.html"
         local_path ([str]): local path, like: "/var/tmp"
     """
-    # Generate file_path to save data
-    file_path = get_filepath(url=url, local_path=local_path)
+    # Get HTML data from URL & create BeautufulSoup object
+    content = load_content(page_url)
+    soup = BeautifulSoup(content, 'lxml')
 
-    # Get HTML data from URL & save parsed data into file
-    html = get_html(url)
-    try:
-        save_file(data=html, local_path=file_path)
-        return(file_path)
-    except Exception as err:
-        print('An error occurred:' + str(err))
+    # Generate main_page_name
+    page_name = get_filename(url=page_url, ext=guess_ext(page_url))
 
+    # Save main page as file
+    load_single_asset(url=page_url,
+                      local_path=local_path + '/' + page_name)
 
-def modify_links(url, file_path):
-    # Read HTML data into variable
-    html = read_file(file_path)
+    # Get list of links
+    links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
 
-    # Initialize soup object
-    soup = BeautifulSoup(html, 'lxml')
+    # If links[] is not empty -> create dir to save asset files
+    if links:
+        folder_name = get_foldername(url=page_url)
+        create_dir(local_path=local_path + '/' + folder_name)
 
-    # Get links as a dict
-    output = {}
-    for tag, attr in ASSET_TAGS.items():
-        # output[tag] = get_links(tag, attr, soup, url)
-        output[tag] = filter_local_links(get_links(tag, attr, soup), url)
-
-    return output
-
-
-def get_links(tag, attr, soup):
-    """Get list of links from HTML page (for specified tag and attribute).
-
-    Args:
-        tag ([str]): HTML meta-tag
-        attr ([str]): meta-tag attribute
-        soup ([soup]): BeautifulSoup Object
-
-    Returns:
-        [type]: list of local and external links, like:
-                ['assets/application.css',
-                '/assets/favicon.ico',
-                'https://ru.hexlet.io/lessons.rss',
-                'https://js.stripe.com/v3/',
-                'https://cdn2.hexlet.io/packs/js/application-6d2cae17d8f39.js']
-    """
-    # Parse list of specified tags
-    links = soup.find_all(tag)
-
-    # Get attributes (url's) from list of tags
-    links = [link.get(attr) for link in links]
-
-    # Return list of links
-    return links
-
-
-def filter_local_links(page_links, page_url):
-    """Remove any links outside parent's url.
-
-    Args:
-        page_links ([list]): list of internal and external links, like:
-                            ['assets/application.css',
-                            '/assets/favicon.ico',
-                            'https://ru.hexlet.io/lessons.rss',
-                            'https://js.stripe.com/v3/']
-        domain_url ([str]): page url, like:
-                            "https://python.org/3/library/exceptions.html"
-
-    Returns:
-        [list]: filtered list of local links, like:
-                ['/assets/favicon.ico',
-                '/assets/application.css',
-                '/lessons.rss',
-                '/professions']
-    """
-
-    # Get domain netlock
-    domain_netlock = get_netloc(page_url)
-
-    filtered = []
-
-    # Filter None values and all external links (outside parent domain)
-    for link in page_links:
-        # Skip all None values
-        if link is None:
-            continue
-
-        link_netloc = get_netloc(link)
-
-        # Add to the filtered[] all links without netlock (i.e. local links)
-        if link_netloc is None:
-            filtered.append(link)
-
-        # Add to filtered[] all link that matches parent domain name
-        # (add paths only without parent domain name)
-        if link_netloc == domain_netlock:
-            filtered.append(urlparse(link).path)
-
-    # Add a slash at the beginning of line (if local link does not have slash)
-    filtered = map(lambda link: ('/' + link) if link[:1] != '/' else link,
-                   filtered)
-
-    # Return list of filtered local links
-    return list(filtered)
-
-
-
-url = 'https://ru.hexlet.io/courses/'
-file_path = '/home/n8creator/projects/python-project-lvl3/tests/fixtures/ru-hexlet-io-professions.html'
-
-print(modify_links(url=url, file_path=file_path))
+    # Load all assets from links[] list
+    for link, tag in links:
+        asset_full_url = get_full_link(page_url=page_url, link=link)
+        asset_name = get_filename(url=asset_full_url, ext=guess_ext(link))
+        load_single_asset(url=asset_full_url,
+                          local_path=(local_path + '/'
+                                      + folder_name + '/'
+                                      + asset_name))
+        output = local_path + '/' + folder_name + '/' + asset_name
+        print(f'Asset {link} loaded at {output}')

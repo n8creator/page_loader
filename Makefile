@@ -25,4 +25,8 @@ dev-upgrade:
 loader:
 	poetry run page_loader
 
+run:
+	poetry run page_loader $(URL)
+
+
 .PHONY: install lint test coverage_xml build packege_install dev-upgrade loader

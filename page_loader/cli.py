@@ -17,6 +17,3 @@ def get_args(argv=None):
     parser.add_argument('URL')
     args = parser.parse_args(argv)
     return args
-
-
-# print(get_args(['https://vc.ru/']))
