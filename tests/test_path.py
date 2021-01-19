@@ -28,7 +28,8 @@ def test_remove_extension(url, output):
     ('http://www.youtube.com/watch?v=gwS1tGLB0vc', 'html'),
     ('www.example.com/test.php?id=12', 'php'),
     ('www.example.com/test', 'html'),
-    ('www.example.com/test/', 'html')
+    ('www.example.com/test/', 'html'),
+    ('https://site.ru', 'html')
 ])
 def test_get_ext(url, output):
     assert output == get_ext(url)
@@ -43,7 +44,9 @@ def test_get_ext(url, output):
     ('https://yastatic.net/pcode/adfox/',
      'yastatic-net-pcode-adfox'),
     ('https://static.criteo.net/js/ld/publishertag.js',
-     'static-criteo-net-js-ld-publishertag')
+     'static-criteo-net-js-ld-publishertag'),
+    ('https://abc-lab.ru', 'abc-lab-ru'),
+    ('https://abc-lab.ru/', 'abc-lab-ru'),
 ])
 def test_url_to_string(url, output):
     assert output == url_to_string(url)
@@ -81,8 +84,6 @@ def test_get_filename(link, ext, output):
 ])
 def test_get_foldername(link, output):
     assert output == get_foldername(url=link)
-
-
 
 
 # @pytest.mark.parametrize('url, local_path, output', [

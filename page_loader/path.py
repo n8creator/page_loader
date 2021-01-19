@@ -52,9 +52,10 @@ def get_ext(s: str) -> str:
     Returns:
         [type]: url extension, like 'php'
     """
+    path = parse_url(url=s)['path']
     # Get full extension from URL
-    if re.search(r"(\.[^.\/]*)$", s):
-        ext = re.search(r"\.([^.\/]*)$", s)[1]
+    if re.search(r"(\.[^.\/]*)$", path):
+        ext = re.search(r"\.([^.\/]*)$", path)[1]
 
         # Remove unwanted elements from extension ('js?2708' -> 'js')
         if '?' in ext:
@@ -105,11 +106,11 @@ def url_to_string(url: str) -> str:
     if p['netloc']:
         output.append(p['netloc'])
     if p['path']:
-        output.append(p['path'])
+        output.append(remove_url_ext(p['path']))
 
     output = ''.join(output)
 
-    return replace_chars(remove_url_ext(output))
+    return replace_chars(output)
 
 
 def get_filename(url: str, ext: str):
