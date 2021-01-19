@@ -1,6 +1,6 @@
 import pytest
 from page_loader.path import remove_url_ext, url_to_string, get_filename,\
-    get_foldername
+    get_foldername, get_ext
 
 
 # Test remove_url_ext() function
@@ -16,6 +16,22 @@ from page_loader.path import remove_url_ext, url_to_string, get_filename,\
 ])
 def test_remove_extension(url, output):
     assert output == remove_url_ext(url)
+
+
+# Test get_ext() function
+@pytest.mark.parametrize('url, output', [
+    ('/templates/cache/69e1154aa47f1.css?2708', 'css'),
+    ('/templates/cache/69e1154aa47f1.css', 'css'),
+    ('/templates/adfox_hb_desktop.js?2708', 'js'),
+    ('https://ya.ru/templates/adfox_hb_desktop.js?2708', 'js'),
+    ('https://www.recaptcha.net/recaptcha/api.js?render=6LenGbgZ', 'js'),
+    ('http://www.youtube.com/watch?v=gwS1tGLB0vc', 'html'),
+    ('www.example.com/test.php?id=12', 'php'),
+    ('www.example.com/test', 'html'),
+    ('www.example.com/test/', 'html')
+])
+def test_get_ext(url, output):
+    assert output == get_ext(url)
 
 
 # Test url_to_string() function

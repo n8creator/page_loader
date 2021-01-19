@@ -1,7 +1,6 @@
 """Module converting URL into readable string or filename."""
 from urllib.parse import urlparse
 import re
-from mimetypes import guess_type
 
 
 def replace_chars(s):
@@ -27,7 +26,7 @@ def replace_chars(s):
     return s
 
 
-def remove_url_ext(s: str):
+def remove_url_ext(s: str) -> str:
     """Remove unnecessary extension from the end of line.
 
     Args:
@@ -38,10 +37,33 @@ def remove_url_ext(s: str):
         [str]: string without extension in the end of line, like:
                "https://yastatic.net/pcode/adfox/header-bidding"
     """
-    if re.search(r"\.[^.\/]*$", s) is not None:
+    if re.search(r"\.[^.\/]*$", s):
         return re.sub(r'\.[^.\/]*$', '', s)
     else:
         return s
+
+
+def get_ext(s: str) -> str:
+    """Get extension from URL without unwanted elements.
+
+    Args:
+        s (str): some url, like 'www.example.com/test.php?id=12"
+
+    Returns:
+        [type]: url extension, like 'php'
+    """
+    # Get full extension from URL
+    if re.search(r"(\.[^.\/]*)$", s):
+        ext = re.search(r"\.([^.\/]*)$", s)[1]
+
+        # Remove unwanted elements from extension ('js?2708' -> 'js')
+        if '?' in ext:
+            ext = ext.split('?')[0]
+        return ext
+
+    # Return 'html' if URL does not have extension
+    else:
+        return 'html'
 
 
 def parse_url(url: str) -> dict:
@@ -118,23 +140,3 @@ def get_foldername(url: str):
         [type]: foldername, like: "python-org-3-library-exceptions_files"
     """
     return str(url_to_string(url) + '_files')
-
-
-def guess_ext(url: str) -> str:
-    EXTS = {
-        'svg+xml': 'svg',
-        'png': 'png',
-        'jpg': 'jpg',
-        'jpeg': 'jpeg',
-        'html': 'html',
-        'javascript': 'js',
-        'vnd.microsoft.icon': 'ico',
-        'css': 'css',
-        None: 'html'
-    }
-    # Guess file type
-    guess = guess_type(url)[0]
-    ext = guess.split('/')[1] if guess else None
-
-    # Return extension value from dict
-    return EXTS[ext] if ext in EXTS.keys() else ext
