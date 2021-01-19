@@ -31,9 +31,8 @@ def download(page_url, local_path):
                       local_path=local_path + '/' + page_name)
 
     # Get list of links
-    links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)  # TODO Тут нужно вернуть список ссылок в том виде, в котором они встречались в коде с netloc и без него # noqa
+    links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
 
-    # return links
     # If links[] is not empty -> create dir to save asset files
     if links:
         folder_name = get_foldername(url=page_url)

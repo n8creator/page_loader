@@ -1,5 +1,5 @@
 from page_loader.path import parse_url
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlunparse
 
 
 def parse_links(tag, attr, soup):
@@ -82,11 +82,7 @@ def filter_links(links: list, url: str):
         # Add to filtered[] all links that contain parent domain name
         # (add paths only without parent domain name)
         if link_netloc == domain_netloc:
-            filtered.append(urlparse(link).path)
-
-    # Add a slash at the beginning of line (if local link does not have slash)
-    filtered = map(lambda link: ('/' + link) if link[:1] != '/' else link,
-                   filtered)
+            filtered.append(link)
 
     # Return list of filtered local links
     return remove_duplicates(filtered)

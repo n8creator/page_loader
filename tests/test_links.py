@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
                       'assets/application.css',
                       'https://ru.hexlet.io/lessons.rss',
                       'https://ru.hexlet.io/professions',
+                      '/',
                       'https://en.hexlet.io/professions']),
     ('script', 'src', ['assets/application.js',
                        'https://js.stripe.com/v3/',
@@ -47,14 +48,14 @@ def test_parse_links(tag, attr, output):
         'https://ru.hexlet.io/professions',
         'https://en.hexlet.io/professions',
         'https://js.stripe.com/v3/',
-
+        '/'
       ],
      'https://ru.hexlet.io/professions',
      [
          '/assets/favicon.ico',
-         '/assets/application.css',
-         '/professions'
-
+         'assets/application.css',
+         'https://ru.hexlet.io/professions',
+         '/'
      ]),
     ])
 def test_filter_links(page_links, url, output):
@@ -83,20 +84,21 @@ def test_get_full_link(page_url, link, output):
 @pytest.mark.parametrize('fixture, tag_meta, output, url', [
     ('ru-hexlet-io-professions.html',
      {'img': 'src', 'link': 'href', 'script': 'src'},
-     [('/assets/professions/frontend.png', 'img'),
-      ('/assets/professions/python.png', 'img'),
-      ('/assets/professions/php.png', 'img'),
-      ('/assets/professions/backend.png', 'img'),
-      ('/assets/professions/layout-designer.png', 'img'),
-      ('/assets/professions/java.png', 'img'),
-      ('/assets/favicon.ico', 'link'),
-      ('/assets/application.css', 'link'),
-      ('/lessons.rss', 'link'),
-      ('/professions', 'link'),
-      ('/assets/application.js', 'script')],
+     [('assets/professions/frontend.png', 'img'),
+      ('assets/professions/python.png', 'img'),
+      ('assets/professions/php.png', 'img'),
+      ('assets/professions/backend.png', 'img'),
+      ('assets/professions/layout-designer.png', 'img'),
+      ('assets/professions/java.png', 'img'),
+      ('assets/favicon.ico', 'link'),
+      ('assets/application.css', 'link'),
+      ('https://ru.hexlet.io/lessons.rss', 'link'),
+      ('https://ru.hexlet.io/professions', 'link'),
+      ('/', 'link'),
+      ('assets/application.js', 'script')],
      'https://ru.hexlet.io/professions'),
     ])
-def test_requests(fixture, tag_meta, output, url):
+def test_get_list_of_links(fixture, tag_meta, output, url):
 
     # Generate Paths to Fixture File
     args_path = 'tests/fixtures/'
