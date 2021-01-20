@@ -35,3 +35,17 @@ def create_dir(local_path: str):
         os.mkdir(local_path)
     except OSError:
         print("Creation of the _files directory failed")
+
+
+def save_soup(data, local_path):
+    """Save string data into file with specified path.
+
+    Args:
+        data ([str]): some data
+        local_path ([str]): local path
+    """
+    try:
+        with open(local_path, 'w+') as file:
+            file.write(data)
+    except Exception as err:
+        print('An error occurred while saving the file:' + str(err))
