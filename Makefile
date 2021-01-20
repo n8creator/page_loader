@@ -17,14 +17,16 @@ package-install:
 	pip install dist/*.whl
 	# pip install --user dist/*.whl
 
-
 dev-upgrade:
+	rm -rf dist/*
+	make build
 	pip install dist/*.whl --upgrade
-
-
-
 
 loader:
 	poetry run page_loader
+
+run:
+	poetry run page_loader $(URL)
+
 
 .PHONY: install lint test coverage_xml build packege_install dev-upgrade loader

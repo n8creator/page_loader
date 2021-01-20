@@ -9,7 +9,7 @@ def main():
     args = get_args()
 
     # Print Result of Download function
-    print(download(url=args.URL,
+    print(download(page_url=args.URL,
                    local_path=args.output))
 
 
