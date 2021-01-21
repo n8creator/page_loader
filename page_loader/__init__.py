@@ -52,11 +52,12 @@ def download(page_url, local_path):
         # Download asset and edit soup object
         try:
             load_single_asset(url=asset_full_url, local_path=asset_path)
-        except:  # noqa
-            pass
-        else:
             soup = edit_soup(remote_link=link, tag=tag, meta=ASSET_TAGS[tag],
-                             local_link=asset_path, soup=soup)
+                             local_link=folder_name + '/' + asset_name,
+                             soup=soup)
+            print(f'{asset_full_url} saved successfully to {asset_path}')
+        except:  # noqa
+            print(f'Warning: {asset_full_url} Can not be loaded')
 
     # Save modified soup
     save_soup(data=soup.prettify(formatter='html5'), local_path=save_path)

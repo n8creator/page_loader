@@ -22,14 +22,14 @@ def load_content(url: str) -> str:
 
 
 def load_single_asset(url, local_path):
-    # Make request
+    # Make request and get content or exception
     try:
         content = load_content(url)
     except Exception as e:
-        print(e)
+        raise e
     else:
-        # Save page
+        # Save page if request was successfull
         try:
             save_file(data=content, local_path=local_path)
         except Exception as err:
-            print('An error occurred:' + str(err))
+            print('An error occurred while file saving:' + str(err))
