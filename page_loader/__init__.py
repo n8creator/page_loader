@@ -5,6 +5,7 @@ from page_loader.loader import load_single_asset
 from page_loader.links import get_list_of_links, get_full_link
 from page_loader.file import create_dir, read_file, save_soup
 from page_loader.editor import edit_soup
+from page_loader.logger import logger
 
 ASSET_TAGS = {
     'img': 'src',
@@ -22,7 +23,7 @@ def download(page_url, local_path):
     """
 
     # Generate main_page_name & saving path
-    page_name = get_filename(url=page_url, ext=get_ext(page_url))
+    page_name = get_filename(url=page_url, ext=get_ext(page_url))  # noqa TODO тут лучше сделать ".html"
     save_path = str(local_path + '/' + page_name)
 
     # Save main page as file
@@ -55,9 +56,9 @@ def download(page_url, local_path):
             soup = edit_soup(remote_link=link, tag=tag, meta=ASSET_TAGS[tag],
                              local_link=folder_name + '/' + asset_name,
                              soup=soup)
-            print(f'{asset_full_url} saved successfully to {asset_path}')
+            logger.debug(f'"{link}" successfully saved to "{local_path}"')
         except:  # noqa
-            print(f'Warning: {asset_full_url} Can not be loaded')
+            logger.warning(f'"{link}" can not be loaded')
 
     # Save modified soup
     save_soup(data=soup.prettify(formatter='html5'), local_path=save_path)

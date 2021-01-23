@@ -1,5 +1,6 @@
 """Module saving some variable data into file."""
 import os
+from page_loader.logger import logger
 
 
 def save_file(data, local_path):
@@ -13,6 +14,7 @@ def save_file(data, local_path):
         with open(local_path, 'wb+') as file:
             file.write(data)
     except Exception as err:
+        logger.warning('An error occurred while saving the file:' + str(err))
         print('An error occurred while saving the file:' + str(err))
 
 
@@ -33,8 +35,8 @@ def read_file(local_path):
 def create_dir(local_path: str):
     try:
         os.mkdir(local_path)
-    except OSError:
-        print("Creation of the _files directory failed")
+    except OSError as e:
+        logger.warning('Creation of the _files directory failed:' + str(e))
 
 
 def save_soup(data, local_path):
@@ -48,4 +50,5 @@ def save_soup(data, local_path):
         with open(local_path, 'w+') as file:
             file.write(data)
     except Exception as err:
+        logger.warning('An error occurred while saving the file:' + str(err))
         print('An error occurred while saving the file:' + str(err))
