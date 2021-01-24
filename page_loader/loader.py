@@ -4,36 +4,54 @@ from page_loader.file import save_file
 from page_loader.logger import logger
 
 
-def load_content(url: str) -> str:  # noqa TODO Тут возвращаются бинарные данные, а не str
-    """Make request & return bytecode or exit depending on the response code.
+def make_request(url: str) -> bin:
+    """Make request, return binary data or raise exception.
 
     Args:
         url ([str]): URL as a string
 
     Returns:
-        [str]: string containing HTML code
+        [bin]: binary code containing server response
     """
-    r = requests.get(url)
 
-    if r.ok:  # 200
+    try:
+        r = requests.get(url, timeout=5)
+        r.raise_for_status()
         return r.content
-    else:  # 40x, 30x, 50x
-        logger.warning(f'"{url}" returned {r.status_code} response. '
-                       f'Asset can not be loaded.')
-        raise Exception(f'"{url}" returned {r.status_code} response. '
-                        f'Asset can not be loaded.')
+    except requests.HTTPError as err:
+        msg = (f'Can\'t connect to "{url}". HTTPError: {r.status_code} '
+               f'response')
+        logger.error(msg)
+        raise Exception(msg) from err
+    except requests.ConnectionError as err:
+        msg = (f'Can\'t reach "{url}" due to ConnectionError (DNS failure, '
+               f'refused connection, etc)')
+        logger.error(msg)
+        raise Exception(msg) from err
+    except requests.Timeout as err:
+        msg = (f'Can\'t connect to "{url}". Сonnection timeout exceeded')
+        logger.error(msg)
+        raise Exception(msg) from err
+    except requests.RequestException as err:
+        msg = f'Can\'t connect to "{url}". Error: {err}'
+        logger.error(msg)
+        raise Exception(msg) from err
 
 
 def load_single_asset(url, local_path):
     # Make request and get content or exception
     try:
-        content = load_content(url)
-    except Exception as e:
-        raise e
+        content = make_request(url)
+    except Exception as err:
+        raise err
+    # Save page if request was successfull
     else:
-        # Save page if request was successfull
         try:
             save_file(data=content, local_path=local_path)
         except Exception as err:
             print('An error occurred while file saving:' + str(err))
             logger.warning('An error occurred while file saving:' + {str(err)})
+
+
+if __name__ == "__main__":
+    print(load_single_asset('https://ecworld1.fund/', '/var/tmp/ec.html'))
