@@ -22,7 +22,7 @@ pytest = "^6.2.1"
 pytest-cov = "^2.10.1"
 
 [tool.poetry.scripts]
-page_loader = "page_loader.scripts.page_loader:main"
+page-loader = "page_loader.scripts.page_loader:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
