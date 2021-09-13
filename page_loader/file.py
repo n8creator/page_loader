@@ -3,7 +3,7 @@ import os
 from page_loader.logger import logger
 
 
-def save_file(data, local_path):
+def save_html(data, local_path):
     """Save string data into file with specified path.
 
     Args:
@@ -11,11 +11,16 @@ def save_file(data, local_path):
         local_path ([str]): local path
     """
     try:
-        with open(local_path, 'wb+') as file:
+        with open(local_path, 'w+') as file:
             file.write(data)
     except Exception as err:
         logger.warning('An error occurred while saving the file:' + str(err))
         print('An error occurred while saving the file:' + str(err))
+
+
+def save_bin(data, local_path):
+    with open(local_path, 'wb+') as file:
+        file.write(data)
 
 
 def read_file(local_path):

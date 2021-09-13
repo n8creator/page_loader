@@ -1,7 +1,7 @@
 """Module downloading HTML content from specified URL into file."""
 from bs4 import BeautifulSoup
 from page_loader.path import get_file_name, get_foldername, get_ext
-from page_loader.loader import load_file
+from page_loader.loader import load_html, load_bin
 from page_loader.links import get_list_of_links, get_full_link
 from page_loader.file import create_dir, read_file, save_soup
 from page_loader.editor import edit_soup
@@ -22,7 +22,7 @@ def download(page_url, local_path):
     file_path = str(local_path + '/' + page_name)
 
     try:
-        load_file(url=page_url, local_path=file_path)
+        load_html(url=page_url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
         # sys.exit(1)
@@ -50,7 +50,7 @@ def download(page_url, local_path):
 
         # Download asset and edit soup object
         try:
-            load_file(url=asset_full_url, local_path=asset_path)
+            load_bin(url=asset_full_url, local_path=asset_path)
             soup = edit_soup(remote_link=link, tag=tag, meta=ASSET_TAGS[tag],
                              local_link=folder_name + '/' + asset_name,
                              soup=soup)
