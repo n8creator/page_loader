@@ -8,7 +8,7 @@ from page_loader.links import get_full_link
 # Read data from file
 def get_data(path: str, name: str):
     file = os.path.join(path, name)
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='utf-8') as f:
         data = f.read()
     return data
 
