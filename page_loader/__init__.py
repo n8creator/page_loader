@@ -26,7 +26,8 @@ def download(page_url, local_path):
         load_file(url=page_url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
-        sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
+        sys.exit(1)
+        # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
     soup = BeautifulSoup(content, 'lxml')
