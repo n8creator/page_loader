@@ -52,7 +52,7 @@ def save_soup(data, local_path):
         local_path ([str]): local path
     """
     try:
-        with open(local_path, 'w+') as file:
+        with open(local_path, 'w+', encoding='utf-8') as file:
             file.write(data)
     except Exception as err:
         logger.warning('An error occurred while saving the file:' + str(err))
