@@ -9,4 +9,6 @@ dist/
 .vscode/
 .coverage
 coverage.xml
-records.log
+*.log
+*.html
+*_files/

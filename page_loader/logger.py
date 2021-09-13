@@ -42,10 +42,10 @@ logger_config = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'formatter': 'std_format',
-            'filename': 'records.log',
-            'mode': 'a',
+            'filename': 'loging.log',
+            'mode': 'w',
             'encoding': 'utf8'
         }
     },

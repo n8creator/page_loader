@@ -1,5 +1,5 @@
 import pytest
-from page_loader.path import remove_url_ext, url_to_string, get_filename,\
+from page_loader.path import remove_url_ext, url_to_string, get_file_name,\
     get_foldername, get_ext
 
 
@@ -68,7 +68,7 @@ def test_url_to_string(url, output):
      'static-criteo-net-js-ld-publishertag.js')
 ])
 def test_get_filename(link, ext, output):
-    assert output == get_filename(url=link, ext=ext)
+    assert output == get_file_name(url=link, ext=ext)
 
 
 # Test get_foldername() function

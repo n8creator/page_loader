@@ -16,5 +16,4 @@ def get_args(argv=None):
                             or skip it to save in current directory')
     parser.add_argument('URL', help='specify URL which should be downloaded')
     args = parser.parse_args(argv)
-    print(args)
     return args
