@@ -9,12 +9,12 @@ def make_request(url: str) -> bin:
         requests.exceptions.InvalidURL
     r = requests.get(url, stream=True, timeout=5)
     r.raise_for_status()
-    return r
+    return r.content
 
 
 def load_html(url, local_path):
     try:
-        content = make_request(url).text
+        content = make_request(url)
     except Exception as err:
         raise err
     # Save page if request was successfull
@@ -28,7 +28,7 @@ def load_html(url, local_path):
 
 def load_bin(url, local_path):
     try:
-        content = make_request(url).content
+        content = make_request(url)
     except Exception as err:
         raise err
     # Save page if request was successfull
