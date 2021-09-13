@@ -6,7 +6,6 @@ from page_loader.links import get_list_of_links, get_full_link
 from page_loader.file import create_dir, read_file, save_soup
 from page_loader.editor import edit_soup
 from page_loader.logger import logger
-import sys
 from termcolor import colored
 
 
@@ -26,7 +25,7 @@ def download(page_url, local_path):
         load_file(url=page_url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
-        sys.exit(1)
+        # sys.exit(1)
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
