@@ -77,4 +77,5 @@ def test_download():
             # Assert for expected file output
             expected_data = get_data(fixtures_path, expected_file)
             downloaded_data = get_data(temp_dir, 'ru-hexlet-io-professions.html')  # noqa
+            print(downloaded_data)
             assert expected_data == downloaded_data
