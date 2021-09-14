@@ -8,17 +8,13 @@ from page_loader.editor import edit_soup
 from page_loader.logger import logger
 
 
-ASSET_TAGS = {
-    'img': 'src',
-    'link': 'href',
-    'script': 'src'
-}
+ASSET_TAGS = {"img": "src", "link": "href", "script": "src"}
 
 
 def download(page_url, local_path):
 
-    page_name = get_file_name(url=page_url, ext='html')
-    file_path = str(local_path + '/' + page_name)
+    page_name = get_file_name(url=page_url, ext="html")
+    file_path = str(local_path + "/" + page_name)
 
     try:
         load_html(url=page_url, local_path=file_path)
@@ -28,7 +24,7 @@ def download(page_url, local_path):
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
-    soup = BeautifulSoup(content, 'html.parser')
+    soup = BeautifulSoup(content, "html.parser")
 
     # Get list of links
     links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
@@ -36,7 +32,7 @@ def download(page_url, local_path):
     # If links[] is not empty -> create dir to save asset files
     if links:
         folder_name = get_foldername(url=page_url)
-        create_dir(local_path=local_path + '/' + folder_name)
+        create_dir(local_path=local_path + "/" + folder_name)
 
         # Load all assets from links[] list
         for link, tag in links:
@@ -45,22 +41,27 @@ def download(page_url, local_path):
             asset_name = get_file_name(url=asset_full_url, ext=get_ext(link))
 
             # Generate local path to save asset
-            asset_path = str(local_path + '/' + folder_name + '/' + asset_name)
+            asset_path = str(local_path + "/" + folder_name + "/" + asset_name)
 
             # Download asset and edit soup object
             try:
                 load_bin(url=asset_full_url, local_path=asset_path)
-                soup = edit_soup(remote_link=link, tag=tag,
-                                 meta=ASSET_TAGS[tag],
-                                 local_link=folder_name + '/' + asset_name,
-                                 soup=soup)
+                soup = edit_soup(
+                    remote_link=link,
+                    tag=tag,
+                    meta=ASSET_TAGS[tag],
+                    local_link=folder_name + "/" + asset_name,
+                    soup=soup,
+                )
                 logger.debug(f'"{link}" successfully saved to "{local_path}"')
             except:  # noqa
                 logger.error(f'"{link}" can not be loaded')
 
     # Save modified soup
-    print(soup.prettify(formatter='html5'))
-    save_soup(data=soup.prettify(formatter='html5'), local_path=file_path)
+    save_soup(
+        data=soup.prettify(encoding="utf-8", formatter="html5"),
+        local_path=file_path
+    )
 
     # Return path to output file
     return file_path
