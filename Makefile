@@ -2,7 +2,7 @@ install:
 	@poetry install
 
 lint:
-	poetry run flake8 page_loader
+	poetry run flake8 page_loader tests
 
 test: lint
 	poetry run pytest -v --verbose -s --cov=page_loader tests/

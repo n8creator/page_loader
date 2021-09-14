@@ -5,7 +5,7 @@ import os
 
 @pytest.mark.parametrize('fixture', [
     ('ru-hexlet-io-professions.html'),
-    ])
+])
 def test_requests(requests_mock, fixture):
 
     # Generate Paths to Fixtures Files

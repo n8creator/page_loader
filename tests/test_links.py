@@ -2,7 +2,7 @@
 import os
 import pytest
 from page_loader.links import filter_links, parse_links, get_full_link,\
-                              get_list_of_links
+    get_list_of_links
 from bs4 import BeautifulSoup
 
 
@@ -22,10 +22,10 @@ from bs4 import BeautifulSoup
                       'https://en.hexlet.io/professions']),
     ('script', 'src', ['assets/application.js',
                        'https://js.stripe.com/v3/',
-                       'https://cdn2.hexlet.io/assets/application-d9ee2c2029a7654c0bf98a128c9fee0c5977c69a56cd83fc097947e55215f6c1.js', # noqa E501
-                       'https://cdn2.hexlet.io/packs/js/runtime-b95232761668dd8b1100.js', # noqa E501
-                       'https://cdn2.hexlet.io/packs/js/vendors~application-03cf108a36d337212e5b.chunk.js', # noqa E501
-                       'https://cdn2.hexlet.io/packs/js/application-6d2cae17d8f39090c064.chunk.js']), # noqa E501
+                       'https://cdn2.hexlet.io/assets/application-d9ee2c2029a7654c0bf98a128c9fee0c5977c69a56cd83fc097947e55215f6c1.js',  # noqa E501
+                       'https://cdn2.hexlet.io/packs/js/runtime-b95232761668dd8b1100.js',  # noqa E501
+                       'https://cdn2.hexlet.io/packs/js/vendors~application-03cf108a36d337212e5b.chunk.js',  # noqa E501
+                       'https://cdn2.hexlet.io/packs/js/application-6d2cae17d8f39090c064.chunk.js']),  # noqa E501
 ])
 def test_parse_links(tag, attr, output):
     # Get fixture data
@@ -49,15 +49,15 @@ def test_parse_links(tag, attr, output):
         'https://en.hexlet.io/professions',
         'https://js.stripe.com/v3/',
         '/'
-      ],
-     'https://ru.hexlet.io/professions',
-     [
-         '/assets/favicon.ico',
-         'assets/application.css',
-         'https://ru.hexlet.io/professions',
-         '/'
-     ]),
-    ])
+    ],
+        'https://ru.hexlet.io/professions',
+        [
+        '/assets/favicon.ico',
+        'assets/application.css',
+        'https://ru.hexlet.io/professions',
+        '/'
+    ]),
+])
 def test_filter_links(page_links, url, output):
     # Make assert
     assert output == filter_links(links=page_links, url=url)
@@ -76,7 +76,7 @@ def test_filter_links(page_links, url, output):
      'http://site.com/templates/cache/3d7e3f272a5ba13469e1154aa47f1.css?2689'),
     ('https://smart-lab.ru',
      'uploads/logo_company_IDF-eurasia_100x100.png',
-     'https://smart-lab.ru/uploads/logo_company_IDF-eurasia_100x100.png'), # noqa
+     'https://smart-lab.ru/uploads/logo_company_IDF-eurasia_100x100.png'),  # noqa
 ])
 def test_get_full_link(page_url, link, output):
     # Make assert
@@ -100,7 +100,7 @@ def test_get_full_link(page_url, link, output):
       ('/', 'link'),
       ('assets/application.js', 'script')],
      'https://ru.hexlet.io/professions'),
-    ])
+])
 def test_get_list_of_links(fixture, tag_meta, output, url):
 
     # Generate Paths to Fixture File
