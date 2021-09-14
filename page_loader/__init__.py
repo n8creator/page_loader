@@ -59,7 +59,7 @@ def download(page_url, local_path):
 
     # Save modified soup
     save_soup(
-        data=soup.prettify(encoding="utf-8", formatter="html5"),
+        data=soup.prettify(formatter="html5"),
         local_path=file_path
     )
 
