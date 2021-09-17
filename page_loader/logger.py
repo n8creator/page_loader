@@ -42,7 +42,7 @@ logger_config = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'formatter': 'std_format',
             'filename': 'loging.log',
             'mode': 'w',
