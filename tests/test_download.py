@@ -23,8 +23,8 @@ def get_byte(path: str, name: str):
 def test_download():
     # Init variables
     url = 'https://ru.hexlet.io/professions'
-    source_file = 'ru-hexlet-io-professions.html'
-    expected_file = 'ru-hexlet-io-professions-output.html'
+    source_file = 'inputs/ru-hexlet-io-professions.html'
+    expected_file = 'expected/ru-hexlet-io-professions.html'
     fixtures_path = 'tests/fixtures/'
 
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -35,18 +35,13 @@ def test_download():
 
             # Create mock requests for ALL ASSETS
             assets = [  # Assets as tuples (url_link, asset_path)
-                ('assets/professions/frontend.png', 'assets/professions/frontend.png'),  # noqa
-                ('assets/professions/python.png', 'assets/professions/python.png'),  # noqa
-                ('assets/professions/php.png', 'assets/professions/php.png'),  # noqa
-                ('assets/professions/backend.png', 'assets/professions/backend.png'),  # noqa
-                ('assets/professions/layout-designer.png', 'assets/professions/layout-designer.png'),  # noqa
-                ('assets/professions/java.png', 'assets/professions/java.png'),
-                ('assets/favicon.ico', 'assets/favicon.ico'),
-                ('assets/application.css', 'assets/application.css'),
-                ('https://ru.hexlet.io/lessons.rss', 'lessons.rss'),
-                ('https://ru.hexlet.io/professions', 'ru-hexlet-io-professions.html'),  # noqa
-                ('assets/application.js', 'assets/application.js'),
-                ('/', 'ru-hexlet-io-professions.html'),
+                ('assets/frontend.png', 'inputs/assets/frontend.png'),  # noqa
+                ('assets/python.png', 'inputs/assets/python.png'),  # noqa
+                ('favicon.ico', 'inputs/favicon.ico'),
+                ('assets/application.css', 'inputs/assets/application.css'),
+                ('https://ru.hexlet.io/professions', 'inputs/ru-hexlet-io-professions.html'),  # noqa
+                ('assets/application.js', 'inputs/assets/application.js'),
+                ('/', 'inputs/ru-hexlet-io-professions.html'),
             ]
             for link, asset_path in assets:
                 mock.get(get_full_link(page_url=url, link=link),
@@ -57,17 +52,11 @@ def test_download():
 
             # Assert if output files exists
             output_files = [
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-frontend.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-python.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-php.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-backend.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-layout-designer.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-professions-java.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-favicon.ico',  # noqa
+                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png',  # noqa
+                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-python.png',  # noqa
+                'ru-hexlet-io-professions_files/ru-hexlet-io-favicon.ico',  # noqa
                 'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.css',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-lessons.rss',  # noqa
                 'ru-hexlet-io-professions_files/ru-hexlet-io-professions.html',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io.html',  # noqa
                 'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.js',  # noqa
                 'ru-hexlet-io-professions.html'
             ]

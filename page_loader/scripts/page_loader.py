@@ -1,4 +1,4 @@
-"Page Loader Executable Script"
+"Page Loader executable script"
 from page_loader.cli import get_args
 from page_loader import download
 from page_loader.logger import logger
@@ -7,10 +7,9 @@ import sys
 
 def main():
     """Main page_loader script."""
-    # Parse Arguments Entered By The User
     try:
-        args = get_args()
-        file_path = download(page_url=args.URL, local_path=args.output)
+        url, path = get_args().URL, get_args().output
+        file_path = download(page_url=url, local_path=path)
     except Exception as err:
         logger.error(err)
         sys.exit(1)

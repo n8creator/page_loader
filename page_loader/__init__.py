@@ -24,7 +24,7 @@ def download(page_url, local_path):
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
-    soup = BeautifulSoup(content, "html.parser")
+    soup = BeautifulSoup(content, "lxml")
 
     # Get list of links
     links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
@@ -58,8 +58,9 @@ def download(page_url, local_path):
                 logger.error(f'"{link}" can not be loaded')
 
     # Save modified soup
+    # print(soup.prettify())
     save_soup(
-        data=soup.prettify(formatter="html5"),
+        data=soup.prettify(),
         local_path=file_path
     )
 
