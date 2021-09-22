@@ -24,7 +24,7 @@ def download(page_url, local_path):
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
-    soup = BeautifulSoup(content, "lxml")
+    soup = BeautifulSoup(content, "html.parser")
 
     # Get list of links
     links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
