@@ -10,5 +10,3 @@ dist/
 .coverage
 coverage.xml
 *.log
-*.html
-*_files/
