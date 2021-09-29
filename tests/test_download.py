@@ -6,9 +6,8 @@ from page_loader.links import get_full_link
 
 
 # Read data from file
-def get_data(path: str, name: str):
-    file = os.path.join(path, name)
-    with open(file, 'r', encoding='utf-8') as f:
+def get_data(file_path: str):
+    with open(file_path, 'r', encoding='utf-8') as f:
         data = f.read()
     return data
 
@@ -20,51 +19,54 @@ def get_byte(path: str, name: str):
     return data
 
 
-def test_download():
-    # Init variables
-    url = 'https://ru.hexlet.io/professions'
-    source_file = 'inputs/ru-hexlet-io-professions.html'
-    expected_file = 'expected/ru-hexlet-io-professions.html'
-    fixtures_path = 'tests/fixtures/'
+URL = 'https://ru.hexlet.io/professions'
+FIXTURES_PATH = 'tests/fixtures/'
 
+INPUT_FIXTURE = 'inputs/ru-hexlet-io-professions.html'
+INPUT_ASSETS = [  # (asset_hyperlink, asset_local_path)
+    ('assets/frontend.png', 'inputs/assets/frontend.png'),
+    ('assets/python.png', 'inputs/assets/python.png'),
+    ('favicon.ico', 'inputs/favicon.ico'),
+    ('assets/application.css', 'inputs/assets/application.css'),
+    ('https://ru.hexlet.io/professions', 'inputs/ru-hexlet-io-professions.html'),  # noqa
+    ('assets/application.js', 'inputs/assets/application.js'),
+    ('/', 'inputs/ru-hexlet-io-professions.html'),
+]
+
+EXPECTED_FIXTURE = 'expected/ru-hexlet-io-professions.html'
+EXPECTED_FILENAME = 'ru-hexlet-io-professions.html'
+EXPECTED_ASSETS = [
+    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png',
+    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-python.png',
+    'ru-hexlet-io-professions_files/ru-hexlet-io-favicon.ico',
+    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.css',
+    'ru-hexlet-io-professions_files/ru-hexlet-io-professions.html',
+    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.js',
+    'ru-hexlet-io-professions.html'
+]
+
+
+def test_download():
     with tempfile.TemporaryDirectory() as temp_dir:
         with requests_mock.Mocker() as mock:
-            # Create mock request for MAIN PAGE
-            html_data = get_data(fixtures_path, source_file)
-            mock.get('https://ru.hexlet.io/professions', text=html_data)
+            # create mock for main html page
+            html = get_data(os.path.join(FIXTURES_PATH, INPUT_FIXTURE))
+            mock.get('https://ru.hexlet.io/professions', text=html)
 
-            # Create mock requests for ALL ASSETS
-            assets = [  # Assets as tuples (url_link, asset_path)
-                ('assets/frontend.png', 'inputs/assets/frontend.png'),  # noqa
-                ('assets/python.png', 'inputs/assets/python.png'),  # noqa
-                ('favicon.ico', 'inputs/favicon.ico'),
-                ('assets/application.css', 'inputs/assets/application.css'),
-                ('https://ru.hexlet.io/professions', 'inputs/ru-hexlet-io-professions.html'),  # noqa
-                ('assets/application.js', 'inputs/assets/application.js'),
-                ('/', 'inputs/ru-hexlet-io-professions.html'),
-            ]
-            for link, asset_path in assets:
-                mock.get(get_full_link(page_url=url, link=link),
-                         content=get_byte(path=fixtures_path, name=asset_path))
+            # create mock's for all assets
+            for asset_hyperlink, asset_local_path in INPUT_ASSETS:
+                link = get_full_link(page_url=URL, link=asset_hyperlink)
+                bytecode = get_byte(path=FIXTURES_PATH, name=asset_local_path)
+                mock.get(link, content=bytecode)
 
-            # Download HTML content into temp_dir
-            download(url, temp_dir)
+            # download page from URL
+            download(URL, temp_dir)
 
-            # Assert if output files exists
-            output_files = [
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-python.png',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-favicon.ico',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.css',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-professions.html',  # noqa
-                'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.js',  # noqa
-                'ru-hexlet-io-professions.html'
-            ]
-            for file in output_files:
-                assert os.path.exists(f'{temp_dir}/{file}') is True  # noqa
+            # assert if downloaded html equals expected
+            expected = get_data(os.path.join(FIXTURES_PATH, EXPECTED_FIXTURE))
+            downloaded = get_data(os.path.join(temp_dir, EXPECTED_FILENAME))
+            assert expected == downloaded
 
-            # Assert for expected file output
-            expected_data = get_data(fixtures_path, expected_file)
-            downloaded_data = get_data(temp_dir, 'ru-hexlet-io-professions.html')  # noqa
-            # print(downloaded_data)
-            assert expected_data == downloaded_data
+            # assert if expected assets exists
+            for asset in EXPECTED_ASSETS:
+                assert os.path.exists(f'{temp_dir}/{asset}') is True
