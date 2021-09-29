@@ -4,12 +4,6 @@ from page_loader.logger import logger
 
 
 def save_html(data, local_path):
-    """Save string data into file with specified path.
-
-    Args:
-        data ([str]): some data
-        local_path ([str]): local path
-    """
     try:
         with open(local_path, 'wb') as file:
             file.write(data)
@@ -23,14 +17,9 @@ def save_bin(data, local_path):
         file.write(data)
 
 
-def read_file(local_path):
-    """Read file data and store into variable.
-
-    Args:
-        local_path ([str]): local path to file
-    """
+def read_file(file_path, mode='r', encoding=None):
     try:
-        with open(local_path, 'r') as file:
+        with open(file_path, mode, encoding=encoding) as file:
             data = file.read()
         return data
     except Exception as err:

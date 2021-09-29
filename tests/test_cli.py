@@ -1,6 +1,6 @@
+import os
 import pytest
 from page_loader.cli import get_args
-import os
 
 
 @pytest.mark.parametrize('url, option, output', [

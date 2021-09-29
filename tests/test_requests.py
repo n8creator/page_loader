@@ -1,6 +1,6 @@
+import os
 import pytest
 import requests
-import os
 
 FIX_PATH = 'tests/fixtures/inputs/'
 
