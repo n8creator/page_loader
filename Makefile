@@ -25,6 +25,9 @@ dev-upgrade:
 loader:
 	poetry run page_loader
 
+temp:
+	rm *.log
+
 run:
 	poetry run page_loader $(URL)
 

@@ -1,38 +1,20 @@
 import pytest
-from page_loader.path import remove_url_ext, url_to_string, get_file_name,\
-    get_foldername, get_ext
+from page_loader.path import url_to_string, get_file_name, get_foldername,\
+    split_path_and_ext
 
 
-# Test remove_url_ext() function
 @pytest.mark.parametrize('url, output', [
-    ('https://yastatic.net/pcode/adfox/header-bidding.js',
-     'https://yastatic.net/pcode/adfox/header-bidding'),
-    ('/templates/skin/smart-lab-x3/js/adfox_hb_desktop.js?2689',
-     '/templates/skin/smart-lab-x3/js/adfox_hb_desktop'),
-    ('https://yastatic.net/pcode/adfox/',
-     'https://yastatic.net/pcode/adfox/'),
-    ('https://smart-lab.ru/blog/669977.php',
-     'https://smart-lab.ru/blog/669977')
+    ('https://site.com/adfox/header-bidding.js',
+     {'path': 'https://site.com/adfox/header-bidding', 'ext': 'js'}),
+    ('/templates/js/adfox_desktop.js?2689',
+     {'path': '/templates/js/adfox_desktop', 'ext': 'js'}),
+    ('https://site.com/adfox/',
+     {'path': 'https://site.com/adfox/', 'ext': 'html'}),
+    ('https://site.com/blog/669977.php',
+     {'path': 'https://site.com/blog/669977', 'ext': 'php'})
 ])
-def test_remove_extension(url, output):
-    assert output == remove_url_ext(url)
-
-
-# Test get_ext() function
-@pytest.mark.parametrize('url, output', [
-    ('/templates/cache/69e1154aa47f1.css?2708', 'css'),
-    ('/templates/cache/69e1154aa47f1.css', 'css'),
-    ('/templates/adfox_hb_desktop.js?2708', 'js'),
-    ('https://ya.ru/templates/adfox_hb_desktop.js?2708', 'js'),
-    ('https://www.recaptcha.net/recaptcha/api.js?render=6LenGbgZ', 'js'),
-    ('http://www.youtube.com/watch?v=gwS1tGLB0vc', 'html'),
-    ('www.example.com/test.php?id=12', 'php'),
-    ('www.example.com/test', 'html'),
-    ('www.example.com/test/', 'html'),
-    ('https://site.ru', 'html')
-])
-def test_get_ext(url, output):
-    assert output == get_ext(url)
+def test_split_path_and_ext(url, output):
+    assert output == split_path_and_ext(path=url)
 
 
 # Test url_to_string() function
