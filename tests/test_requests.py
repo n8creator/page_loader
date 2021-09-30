@@ -1,6 +1,6 @@
 import os
 import pytest
-import requests
+import requests  # REFACTOR, bad logic
 
 FIX_PATH = 'tests/fixtures/inputs/'
 

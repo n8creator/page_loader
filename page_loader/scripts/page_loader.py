@@ -9,7 +9,7 @@ def main():
     """Main page_loader script."""
     try:
         url, path = get_args().URL, get_args().output
-        file_path = download(page_url=url, local_path=path)
+        file_path = download(url=url, local_path=path)
     except Exception as err:
         logger.error(err)
         sys.exit(1)

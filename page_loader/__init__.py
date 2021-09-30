@@ -2,56 +2,57 @@
 from bs4 import BeautifulSoup
 from page_loader.path import get_file_name, get_foldername, split_path_and_ext
 from page_loader.loader import load_data
-from page_loader.links import get_list_of_links, get_full_link
+from page_loader.links import get_links, get_absolute_link
 from page_loader.file import create_dir, read_file, save_file
 from page_loader.editor import edit_soup
 from page_loader.logger import logger
+import sys
+import os
 
 
 ASSET_TAGS = {"img": "src", "link": "href", "script": "src"}
 
 
-def download(page_url, local_path):
+def download(url, local_path):
 
-    page_name = get_file_name(url=page_url, ext="html")
-    file_path = str(local_path + "/" + page_name)
+    page_name = get_file_name(url=url, ext="html")  # REFACTOR
+    file_path = os.path.join(local_path, page_name)
 
     try:
-        load_data(url=page_url, local_path=file_path)
+        load_data(url=url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
-        # sys.exit(1)
+        sys.exit(1)
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
     soup = BeautifulSoup(content, "html.parser")
 
     # Get list of links
-    links = get_list_of_links(tag_meta=ASSET_TAGS, url=page_url, soup=soup)
+    links = get_links(tag_meta=ASSET_TAGS, url=url, soup=soup)
 
     # If links[] is not empty -> create dir to save asset files
     if links:
-        folder_name = get_foldername(url=page_url)
-        create_dir(local_path=local_path + "/" + folder_name)
+        folder_name = get_foldername(url=url)   # REFACTOR
+        create_dir(local_path=os.path.join(local_path, folder_name))
 
-        # Load all assets from links[] list
         for link, tag in links:
-            # Generate full asset link to make request & name to save file
-            asset_full_url = get_full_link(page_url=page_url, link=link)
-            asset_name = get_file_name(url=asset_full_url,
-                                       ext=split_path_and_ext(link)['ext'])
+            asset_url = get_absolute_link(page_url=url, local_link=link)
+            asset_name = get_file_name(url=asset_url,
+                                       ext=split_path_and_ext(link)['ext'])    # REFACTOR
 
             # Generate local path to save asset
-            asset_path = str(local_path + "/" + folder_name + "/" + asset_name)
+            asset_local_path = os.path.join(local_path, folder_name, asset_name)
 
             # Download asset and edit soup object
             try:
-                load_data(url=asset_full_url, local_path=asset_path)
+                load_data(url=asset_url, local_path=asset_local_path)
                 soup = edit_soup(
                     hyperlink=link,
                     tag=tag,
                     meta=ASSET_TAGS[tag],
-                    local_link=folder_name + "/" + asset_name,
+                    local_link=os.path.join(
+                        folder_name, asset_name),  # REFACTOR
                     soup=soup,
                 )
                 logger.debug(f'"{link}" successfully saved to "{local_path}"')

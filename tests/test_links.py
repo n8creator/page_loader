@@ -2,15 +2,16 @@
 import os
 import pytest
 from bs4 import BeautifulSoup
-from page_loader.links import filter_links, parse_links, get_full_link
-from page_loader.links import get_list_of_links
+from page_loader.links import filter_links, parse_links, get_absolute_link
+from page_loader.links import get_links
 
 FIXTURES_PATH = 'tests/fixtures/inputs/'
 
 
 @pytest.mark.parametrize('fixture, tag, attr, output', [
     ('ru-hexlet-io-professions.html', 'img', 'src',
-     ['assets/frontend.png', 'assets/python.png'],),
+     ['assets/frontend.png',
+      'assets/python.png'],),
     ('ru-hexlet-io-professions.html', 'link', 'href',
      ['favicon.ico',
       'assets/application.css',
@@ -48,22 +49,22 @@ def test_filter_links(url, page_links, output):
     assert output == filter_links(links=page_links, url=url)
 
 
-@pytest.mark.parametrize('page_url, link, expected_output', [
-    ('https://ru.site.io/professions',
+@pytest.mark.parametrize('page_url, link, expected', [
+    ('https://site.io/page',
      '/assets/favicon.ico',
-     'https://ru.site.io/assets/favicon.ico'),
-    ('https://localhost/page',
+     'https://site.io/assets/favicon.ico'),
+    ('https://site.io/page',
      '/',
-     'https://localhost/'),
-    ('http://site.com',
+     'https://site.io/'),
+    ('http://site.io',
      '/cache/style.css?26',
-     'http://site.com/cache/style.css?26'),
-    ('http://localhost.io',
-     'uploads/logo_100x100.png',
-     'http://localhost.io/uploads/logo_100x100.png'),
+     'http://site.io/cache/style.css?26'),
+    ('http://site.io',
+     'http://site.io/uploads/logo_100x100.png',
+     'http://site.io/uploads/logo_100x100.png'),
 ])
-def test_get_full_link(page_url, link, expected_output):
-    assert expected_output == get_full_link(page_url=page_url, link=link)
+def test_get_absolute_link(page_url, link, expected):
+    assert expected == get_absolute_link(page_url=page_url, local_link=link)
 
 
 @pytest.mark.parametrize('url, fixture, tag_meta, output', [
@@ -82,10 +83,10 @@ def test_get_full_link(page_url, link, expected_output):
      ]
      ),
 ])
-def test_get_list_of_links(fixture, tag_meta, output, url):
+def test_get_links(fixture, tag_meta, output, url):
     data_file = os.path.join(FIXTURES_PATH, fixture)
     with open(data_file, 'r') as f:
         data = f.read()
 
     soup = BeautifulSoup(data, 'lxml')
-    assert output == get_list_of_links(tag_meta=tag_meta, url=url, soup=soup)
+    assert output == get_links(tag_meta=tag_meta, url=url, soup=soup)

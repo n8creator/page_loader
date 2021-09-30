@@ -1,127 +1,52 @@
-from page_loader.path import parse_url
 from urllib.parse import urlunparse
+from page_loader.path import parse_url
+from operator import itemgetter
 
 
 def parse_links(tag, attr, soup):
-    """Get list of links from HTML page (for specified tag and attribute).
-
-    Args:
-        tag ([str]): HTML meta-tag
-        attr ([str]): meta-tag attribute
-        soup ([soup]): BeautifulSoup Object
-
-    Returns:
-        [type]: list of local and external links, like:
-                ['assets/application.css',
-                '/assets/favicon.ico',
-                'https://ru.hexlet.io/lessons.rss',
-                'https://js.stripe.com/v3/',
-                'https://cdn2.hexlet.io/packs/js/application-6d2cae17d8f39.js']
-    """
-    # Parse list of specified tags
+    """Get list of links from HTML page (for specified tag and attribute)."""
     links = soup.find_all(tag)
-
-    # Get attributes (url's) from list of tags
-    links = [link.get(attr) for link in links]
-
-    # Return list of links
+    links = [link.get(attr) for link in links]  # get attributes from each link
     return links
 
 
 def remove_duplicates(data: list) -> list:
-    """Remove duplicates from the list.
-
-    Args:
-        data (list): some list that main contain duplicates
-
-    Returns:
-        list: output list without duplicates
-    """
+    """Remove duplicate items from the list."""
     return list(dict.fromkeys(data))
 
 
 def filter_links(links: list, url: str):
-    """Filter any links outside parent's url.
-
-    Args:
-        page_links ([list]): list of internal and external links, like:
-                            ['assets/application.css',
-                            '/assets/favicon.ico',
-                            'https://ru.hexlet.io/lessons.rss',
-                            'https://js.stripe.com/v3/']
-        domain_url ([str]): page url, like:
-                            "https://python.org/3/library/exceptions.html"
-
-    Returns:
-        [list]: filtered list of local links, like:
-                ['/assets/favicon.ico',
-                '/assets/application.css',
-                '/lessons.rss',
-                '/professions']
-    """
-
-    # Get domain from url
-    domain_netloc = parse_url(url)['netloc']
-
+    """Filter any links outside URL's domain."""
     filtered = []
-
-    # Filter all None and external links (outside parent domain)
+    domain_netloc = parse_url(url)['netloc']  # Get URL's domain name
     for link in links:
-
-        # Skip all None values from links[] list
-        if link is None:
+        link_netloc = parse_url(link)['netloc']  # Get link's domain name
+        if link is None:  # Skip all None values from links[] list
             continue
-
-        # Get link netloc
-        link_netloc = parse_url(link)['netloc']
-
-        # Add to the filtered[] all links without netlock (i.e. local links)
         if link_netloc == '':
             filtered.append(link)
-
-        # Add to filtered[] all links that contain parent domain name
-        # (add paths only without parent domain name)
         if link_netloc == domain_netloc:
             filtered.append(link)
-
-    # Return list of filtered local links
     return remove_duplicates(filtered)
 
 
-def get_list_of_links(tag_meta: dict, url: str, soup) -> list:
-    """Generate full list of links to parse & replace.
-
-    Args:
-        tag_dict (dict): dict containing tags and meta-tags to process, like:
-                        {'img': 'src', 'link': 'href', 'script': 'src'}
-        url (str): page url
-        soup ([type]): BeautifulSoup object containing HTML-code
-
-    Returns:
-        list: filtered list of local links with tags, like:
-             '('/rynok-situatsiya-v-momente-23/', 'link')'
-    """
+def get_links(tag_meta: dict, url: str, soup) -> list:
+    """Get list of links for specified 'tag & meta' tags to parse & replace."""
     links = []
     for tag, attr in tag_meta.items():
-        local_links = filter_links(links=parse_links(tag=tag,
-                                                     attr=attr,
-                                                     soup=soup),
-                                   url=url)
-        for link in local_links:
+        local_links = parse_links(tag=tag, attr=attr, soup=soup)
+        for link in filter_links(links=local_links, url=url):
             links.append((link, tag))
     return links
 
 
-def get_full_link(page_url: str, link: str) -> str:
+def get_absolute_link(page_url: str, local_link: str) -> str:
+    """Convert local link into absolute link in 'page_url' domain."""
+    domain_params = parse_url(page_url)
+    local_params = parse_url(local_link)
 
-    url = parse_url(page_url)
-    lnk = parse_url(link)
-
-    scheme = url['scheme']
-    netloc = url['netloc']
-    path = lnk['path']
-    params = lnk['params']
-    query = lnk['query']
-    fragment = lnk['fragment']
+    scheme, netloc = itemgetter('scheme', 'netloc')(domain_params)
+    path, params, query, fragment = itemgetter(
+        'path', 'params', 'query', 'fragment')(local_params)
 
     return urlunparse([scheme, netloc, path, params, query, fragment])

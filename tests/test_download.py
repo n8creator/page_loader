@@ -3,7 +3,7 @@ import tempfile
 import requests_mock
 from page_loader import download
 from page_loader.file import read_file
-from page_loader.links import get_full_link
+from page_loader.links import get_absolute_link
 
 
 URL = 'https://ru.hexlet.io/professions'
@@ -42,7 +42,7 @@ def test_download():
 
             # create mock's for all assets
             for hyperlink, local_path in INPUT_ASSETS:
-                asset_hyperlink = get_full_link(page_url=URL, link=hyperlink)
+                asset_hyperlink = get_absolute_link(page_url=URL, local_link=hyperlink)
 
                 asset_fixture_path = os.path.join(FIXTURES_PATH, local_path)
                 bytecode = read_file(file_path=asset_fixture_path, mode='rb')

@@ -11,3 +11,4 @@ dist/
 coverage.xml
 *.log
 .history/
+.pytest_cache/
