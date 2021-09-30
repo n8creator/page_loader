@@ -26,7 +26,7 @@ def test_parse_links(tag, attr, output, fixture):
     with open(data_source, 'r') as f:
         data = f.read()
 
-    soup = BeautifulSoup(data, 'lxml')
+    soup = BeautifulSoup(data, 'html.parser')
     assert output == parse_links(tag, attr, soup)
 
 
@@ -88,5 +88,5 @@ def test_get_links(fixture, tag_meta, output, url):
     with open(data_file, 'r') as f:
         data = f.read()
 
-    soup = BeautifulSoup(data, 'lxml')
+    soup = BeautifulSoup(data, 'html.parser')
     assert output == get_links(tag_meta=tag_meta, url=url, soup=soup)

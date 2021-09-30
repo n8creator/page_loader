@@ -1,4 +1,3 @@
-"""Module saving some variable data into file."""
 import os
 from page_loader.logger import logger
 

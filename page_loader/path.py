@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 import re
+import os
 
 
 def parse_url(url: str) -> dict:
@@ -36,7 +37,7 @@ def split_path_and_ext(path: str) -> dict:
     # Get extension or return 'html' by default
     if re.search(pattern, path):
         extension = re.search(r'\.([^.\/]*)$', path)[1]
-        if '?' in extension:  # Remove elements from extension ('js?2708' -> 'js')
+        if '?' in extension:  # Remove elements from ext ('js?2708' -> 'js')
             extension = extension.split('?')[0]
     else:
         extension = 'html'
@@ -55,11 +56,14 @@ def url_to_string(url: str) -> str:
     return replace_chars(output)
 
 
-def get_file_name(url: str, ext: str):  # TODO refactoring required
-    if not ext:
-        raise ValueError('Invalid asset value - may not be None or empty')
-    return f'{url_to_string(url)}.{ext}'
+def get_full_path(*args):
+    """Generate local path from the list or arguments."""
+    return os.path.join(*args)
 
 
-def get_foldername(url: str):
-    return str(url_to_string(url) + '_files')
+def get_local_name(url: str, mode, ext: str = 'html'):
+    """Return local name for file or for a folder with extension."""
+    if mode == 'file':
+        return f'{url_to_string(url)}.{ext}'
+    if mode == 'folder':
+        return f'{url_to_string(url)}_files'

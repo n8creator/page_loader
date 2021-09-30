@@ -1,4 +1,3 @@
-"Parse arguments defined by user."
 import argparse
 import os
 import sys
