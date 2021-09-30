@@ -22,7 +22,7 @@ def download(url, local_path):
         load_data(url=url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
-        sys.exit(1)
+        # sys.exit(1)
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
     content = read_file(file_path)
