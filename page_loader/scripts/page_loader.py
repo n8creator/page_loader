@@ -11,6 +11,7 @@ def main():
         url, path = get_args().URL, get_args().output
         file_path = download(url=url, path=path)
     except Exception as err:
+        print(Exception)
         logger.error(err)
         sys.exit(1)
     else:

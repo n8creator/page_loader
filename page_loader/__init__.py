@@ -6,7 +6,8 @@ from page_loader.file import create_dir, read_file, save_file
 from page_loader.editor import edit_soup
 from page_loader.logger import logger
 from operator import itemgetter
-
+from progress.bar import IncrementalBar
+from time import sleep
 
 ASSET_TAGS = {"img": "src", "link": "href", "script": "src"}
 
@@ -20,6 +21,7 @@ def download(url, path):
         load_data(url=url, local_path=file_path)
     except Exception as err:
         logger.critical(err)
+        raise err
         # sys.exit(1)
         # sys.exit(colored(f'Error! {err}. Script has been stopped.', 'red'))
 
@@ -35,6 +37,9 @@ def download(url, path):
         # Generate folder_name and create directory
         folder_name = get_local_name(url=url, mode='folder')
         create_dir(local_path=get_full_path(path, folder_name))
+
+        # Initiate progress bar
+        progress_bar = IncrementalBar('Loading resourses:', max=len(links))
 
         for link, tag in links:
             # Generate 'absolute_url' to load and 'file_name' for item
@@ -54,6 +59,13 @@ def download(url, path):
                 logger.debug(f'"{link}" successfully saved to "{path}"')
             except:  # noqa
                 logger.error(f'"{link}" can not be loaded')
+
+            # Start progress bar and make pause
+            progress_bar.next()
+
+    # Finish progess_bar
+    progress_bar.finish()
+    sleep(0.1)
 
     # Save modified soup
     save_file(data=soup.prettify(), local_path=file_path, mode='w')

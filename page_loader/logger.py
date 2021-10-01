@@ -21,7 +21,8 @@ logger_config = {
     'formatters': {
         'std_format': {
             'format': '{asctime}:: {levelname}:: {name}:: {message} ::'
-                      ' Module: {module} - Function: {funcName}',
+                      ' Module: {module} | Function: {funcName} |'
+                      ' Line: {lineno}',
             'datefmt': '%Y-%m-%d %H:%M:%S',
             'style': '{'
         }
