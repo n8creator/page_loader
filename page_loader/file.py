@@ -7,9 +7,10 @@ def save_file(data, local_path, mode='wb'):
     try:
         with open(local_path, mode) as file:
             file.write(data)
-    except Exception as err:
-        logger.warning('An error occurred while saving the file:' + str(err))
-        print('An error occurred while saving the file:' + str(err))
+        logger.debug(f'Data had been saved into \'{local_path}\' file')
+    except OSError as err:
+        logger.error(err)
+        raise OSError(err)
 
 
 def read_file(file_path, mode='r', encoding=None):
@@ -18,13 +19,16 @@ def read_file(file_path, mode='r', encoding=None):
         with open(file_path, mode, encoding=encoding) as file:
             data = file.read()
         return data
-    except Exception as err:
-        print('An error occurred while reading the file:' + str(err))
+    except OSError as err:
+        logger.error(err)
+        raise OSError(err)
 
 
 def create_dir(local_path: str):
     """Create new directory at 'local_path' or throw exception."""
     try:
         os.mkdir(local_path)
-    except OSError as e:
-        logger.warning('Creation of the _files directory failed:' + str(e))
+        logger.debug(f'New folder was created at \'{local_path}\'')
+    except OSError as err:
+        logger.error(err)
+        raise OSError(err)

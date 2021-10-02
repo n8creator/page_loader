@@ -20,9 +20,9 @@ logger_config = {
     },
     'formatters': {
         'std_format': {
-            'format': '{asctime}:: {levelname}:: {name}:: {message} ::'
-                      ' Module: {module} | Function: {funcName} |'
-                      ' Line: {lineno}',
+            'format': '{asctime}; {levelname}; {name}; Message: {message};'
+                      ' Pathname: {pathname}; Module: {module};'
+                      ' Function: {funcName}; Line: {lineno};',
             'datefmt': '%Y-%m-%d %H:%M:%S',
             'style': '{'
         }
