@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.1"
-description = ""
+description = "Page Loader utility allows to download some page and associated files from the Web."
 authors = ["n8creator <n8creator@pm.me>"]
 packages = [
   { include = "page_loader" },
