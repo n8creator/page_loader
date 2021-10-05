@@ -1,4 +1,5 @@
 import os
+import pytest
 import tempfile
 import requests_mock
 from page_loader import download
@@ -60,3 +61,12 @@ def test_download():
             # assert if expected assets exists in temp folder
             for asset in EXPECTED_ASSETS:
                 assert os.path.exists(f'{temp_dir}/{asset}') is True
+
+
+@pytest.mark.parametrize('status_code', [
+    400, 404, 500, 503
+])
+def test_http_status(requests_mock, tmpdir, status_code):
+    requests_mock.get(URL, status_code=status_code)
+    with pytest.raises(Exception):
+        download(URL, tmpdir)
