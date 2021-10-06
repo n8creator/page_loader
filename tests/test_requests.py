@@ -1,6 +1,6 @@
 import pytest
 from page_loader.file import read_file
-from page_loader.path import get_full_path
+from page_loader.url import get_full_path
 from page_loader.loader import make_request
 from requests.exceptions import HTTPError
 

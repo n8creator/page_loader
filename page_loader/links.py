@@ -1,5 +1,5 @@
 from urllib.parse import urlunparse
-from page_loader.path import parse_url
+from page_loader.url import parse_url
 from operator import itemgetter
 
 

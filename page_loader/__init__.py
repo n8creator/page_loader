@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from page_loader.path import split_path_and_ext, get_full_path, get_local_name
+from page_loader.url import split_path_and_ext, get_full_path, get_local_name
 from page_loader.loader import load_data
 from page_loader.links import get_links, get_absolute_link
 from page_loader.file import create_dir, read_file, save_file
@@ -7,11 +7,13 @@ from page_loader.editor import edit_soup
 from operator import itemgetter
 from progress.bar import IncrementalBar
 from page_loader.logger import logger
+import os
 
 ASSET_TAGS = {"img": "src", "link": "href", "script": "src"}
+DEFAULT_PATH = os.getcwd()
 
 
-def download(url, path):
+def download(url, path=DEFAULT_PATH):
     """Download HTML page and page assets (img, css files) from given 'url'."""
 
     # Generate output 'page_name' and 'file_path' and load page

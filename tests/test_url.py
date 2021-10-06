@@ -1,5 +1,5 @@
 import pytest
-from page_loader.path import url_to_string, get_local_name, get_full_path, \
+from page_loader.url import url_to_string, get_local_name, get_full_path, \
     split_path_and_ext
 
 
