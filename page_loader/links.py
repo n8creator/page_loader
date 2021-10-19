@@ -5,13 +5,15 @@ from operator import itemgetter
 
 def filter_links_in_domain(links_tags: list, url: str):
     """Filter any links outside URL's domain."""
-    domain_netloc = parse_url(url)['netloc']
-    filtered = []
-    for link, tag in links_tags:
-        link_netloc = parse_url(link)['netloc']
-        if link_netloc == '' or link_netloc == domain_netloc:
-            filtered.append((link, tag))
-    return filtered
+
+    def in_domain(link_tag: tuple, url: str):
+        link, _ = link_tag  # destructure link_tag tuple
+        domain_netloc = parse_url(url)['netloc']
+        link_netlock = parse_url(link)['netloc']
+        return True if (link_netlock == '' or link_netlock == domain_netloc) else False
+
+    return list(filter(lambda link_tag: in_domain(link_tag=link_tag, url=url),
+                       links_tags))
 
 
 def get_links(tag_meta: dict, url: str, soup) -> list:
