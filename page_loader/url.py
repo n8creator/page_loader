@@ -1,6 +1,5 @@
 from urllib.parse import urlparse
 import re
-import os
 
 
 def parse_url(url: str) -> dict:
@@ -54,11 +53,6 @@ def url_to_string(url: str) -> str:
     path_without_ext = split_path_and_ext(p['path'])['path']
     output = ''.join([p['netloc'], path_without_ext])
     return replace_chars(output)
-
-
-def get_full_path(*args):
-    """Generate local path from the list or arguments."""
-    return os.path.join(*args)
 
 
 def get_local_name(url: str, mode, ext: str = 'html'):

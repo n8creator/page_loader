@@ -39,7 +39,7 @@ def test_download():
         with requests_mock.Mocker() as mock:
             # create mock for main html page
             html = read_file(os.path.join(FIXTURES_PATH, INPUT_FIXTURE))
-            mock.get('https://ru.hexlet.io/professions', text=html)
+            mock.get(URL, text=html)
 
             # create mock's for all assets
             for hyperlink, local_path in INPUT_ASSETS:

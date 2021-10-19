@@ -1,6 +1,5 @@
 import pytest
-from page_loader.url import url_to_string, get_local_name, get_full_path, \
-    split_path_and_ext
+from page_loader.url import url_to_string, get_local_name, split_path_and_ext
 
 
 # Test split_path_and_ext() function
@@ -29,11 +28,6 @@ def test_split_path_and_ext(url, output):
 ])
 def test_url_to_string(url, output):
     assert output == url_to_string(url)
-
-
-# Test get_full_path() function
-def get_get_full_path():
-    assert get_full_path('site', 'blog', 'page.html') == 'site/blog/page.html'
 
 
 # Test get_local_name() function for 'file' mode only

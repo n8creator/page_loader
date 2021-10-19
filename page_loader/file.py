@@ -32,3 +32,8 @@ def create_dir(local_path: str):
     except OSError as err:
         logger.error(err)
         raise OSError(err)
+
+
+def get_full_path(*args):
+    """Generate local path from the list or arguments."""
+    return os.path.join(*args)
