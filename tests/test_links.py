@@ -2,51 +2,33 @@
 import os
 import pytest
 from bs4 import BeautifulSoup
-from page_loader.links import filter_links, parse_links, get_absolute_link
-from page_loader.links import get_links
+from page_loader.links import get_absolute_link
+from page_loader.links import get_links, filter_links_in_domain
 
 FIXTURES_PATH = 'tests/fixtures/inputs/'
 
 
-@pytest.mark.parametrize('fixture, tag, attr, output', [
-    ('ru-hexlet-io-professions.html', 'img', 'src',
-     ['assets/frontend.png',
-      'assets/python.png'],),
-    ('ru-hexlet-io-professions.html', 'link', 'href',
-     ['favicon.ico',
-      'assets/application.css',
-      'https://ru.hexlet.io/professions',
-      'https://en.hexlet.io/professions'],),
-    ('ru-hexlet-io-professions.html', 'script', 'src',
-     ['assets/application.js',
-      'https://js.stripe.com/v3/'],),
-])
-def test_parse_links(tag, attr, output, fixture):
-    data_source = os.path.join(FIXTURES_PATH, fixture)
-    with open(data_source, 'r') as f:
-        data = f.read()
-
-    soup = BeautifulSoup(data, 'html.parser')
-    assert output == parse_links(tag, attr, soup)
-
-
-@pytest.mark.parametrize('url, page_links, output', [
+@pytest.mark.parametrize('url, links_tags, output', [
     (
-        'https://ru.site.io/about',  # url
-        ['https://ru.site.io/about',  # page_links
-         'https://en.site.io/about',
-         'https://js.stripe.com/v3/',
-         '/assets/favicon.ico',
-         'assets/application.css',
-         '/'],
-        ['https://ru.site.io/about',  # output
-         '/assets/favicon.ico',
-         'assets/application.css',
-         '/']
+        'https://ru.hexlet.io/professions',
+        [('assets/frontend.png', 'img'),  # links_tags
+         ('assets/python.png', 'img'),
+         ('favicon.ico', 'link'),
+         ('assets/application.css', 'link'),
+         ('https://ru.hexlet.io/professions', 'link'),
+         ('https://en.hexlet.io/professions', 'link'),
+         ('assets/application.js', 'script'),
+         ('https://js.stripe.com/v3/', 'script')],
+        [('assets/frontend.png', 'img'),  # output
+         ('assets/python.png', 'img'),
+         ('favicon.ico', 'link'),
+         ('assets/application.css', 'link'),
+         ('https://ru.hexlet.io/professions', 'link'),
+         ('assets/application.js', 'script')]
     ),
 ])
-def test_filter_links(url, page_links, output):
-    assert output == filter_links(links=page_links, url=url)
+def test_filter_links_in_domain(url, links_tags, output):
+    assert output == filter_links_in_domain(links_tags=links_tags, url=url)
 
 
 @pytest.mark.parametrize('page_url, link, expected', [
