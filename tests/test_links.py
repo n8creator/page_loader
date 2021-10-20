@@ -2,7 +2,7 @@
 import os
 import pytest
 from bs4 import BeautifulSoup
-from page_loader.links import get_absolute_link
+from page_loader.links import get_abs_link
 from page_loader.links import get_links, filter_links_in_domain
 
 FIXTURES_PATH = 'tests/fixtures/inputs/'
@@ -46,7 +46,7 @@ def test_filter_links_in_domain(url, links_tags, output):
      'http://site.io/uploads/logo_100x100.png'),
 ])
 def test_get_absolute_link(page_url, link, expected):
-    assert expected == get_absolute_link(page_url=page_url, local_link=link)
+    assert expected == get_abs_link(page_url=page_url, local_link=link)
 
 
 @pytest.mark.parametrize('url, fixture, tag_meta, output', [

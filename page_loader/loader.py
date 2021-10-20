@@ -1,6 +1,5 @@
 import requests
 from requests.exceptions import ConnectionError, HTTPError
-from page_loader.file import save_file
 from page_loader.logger import logger
 
 
@@ -16,9 +15,3 @@ def make_request(url: str) -> bin:
     except HTTPError as err:
         logger.error(err)
         raise HTTPError(f'HTTPError occured: \'{err}\'')
-
-
-def load_data(url, local_path):
-    """Load data from url and save it into local file."""
-    content = make_request(url)
-    save_file(data=content, local_path=local_path)

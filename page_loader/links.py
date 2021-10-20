@@ -25,7 +25,7 @@ def get_links(tag_meta: dict, url: str, soup) -> list:
     return filter_links_in_domain(links_tags=links, url=url)
 
 
-def get_absolute_link(page_url: str, local_link: str) -> str:
+def get_abs_link(page_url: str, local_link: str) -> str:
     """Convert local link into absolute link in 'page_url' domain."""
     domain_params = parse_url(page_url)
     local_params = parse_url(local_link)
