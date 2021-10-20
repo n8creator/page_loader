@@ -27,7 +27,6 @@ print(file_path)  # => '/var/tmp/www-python-org.html'
 $ page-loader https://www.python.org/ -o /var/tmp/
 
 # Output
-Index page 'https://www.python.org/' was downloaded!
 Loading resourses: |████████████████████████████████| 15/15
 Output page had been saved to '/var/tmp/www-python-org.html'
 ```
