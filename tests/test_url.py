@@ -1,5 +1,6 @@
 import pytest
-from page_loader.url import url_to_string, get_local_name, split_path_and_ext
+from page_loader.url import url_to_string, get_filename, get_foldername, \
+    split_path_and_ext
 
 
 # Test split_path_and_ext() function
@@ -30,31 +31,31 @@ def test_url_to_string(url, output):
     assert output == url_to_string(url)
 
 
-# Test get_local_name() function for 'file' mode only
-@pytest.mark.parametrize('url, mode, ext, output', [
-    ('https://site.io/blog/page.php', 'file', 'php',
+# Test get_filename() function
+@pytest.mark.parametrize('url, ext, output', [
+    ('https://site.io/blog/page.php', 'php',
      'site-io-blog-page.php'),
-    ('/templates/skin/banner_desktop.js?2689', 'file', 'js',
+    ('/templates/skin/banner_desktop.js?2689', 'js',
      'templates-skin-banner-desktop.js'),
-    ('https://site.io/pcode/page/', 'file', 'html',
+    ('https://site.io/pcode/page/', 'html',
      'site-io-pcode-page.html'),
-    ('https://ru.site.io/js/publishertag.js', 'file', 'js',
+    ('https://ru.site.io/js/publishertag.js', 'js',
      'ru-site-io-js-publishertag.js')
 ])
-def test_get_local_name_files(url, mode, ext, output):
-    assert output == get_local_name(url, mode, ext)
+def test_get_filename(url, ext, output):
+    assert output == get_filename(url=url, ext=ext)
 
 
-# Test get_local_name() function for 'folder' mode only
-@pytest.mark.parametrize('url, mode, output', [
-    ('https://site.io/blog/page.php', 'folder',
+# Test get_foldername()
+@pytest.mark.parametrize('url, output', [
+    ('https://site.io/blog/page.php',
      'site-io-blog-page_files'),
-    ('/templates/skin/banner_desktop.js?2689', 'folder',
+    ('/templates/skin/banner_desktop.js?2689',
      'templates-skin-banner-desktop_files'),
-    ('https://site.io/pcode/page/', 'folder',
+    ('https://site.io/pcode/page/',
      'site-io-pcode-page_files'),
-    ('https://ru.site.io/js/publishertag.js', 'folder',
+    ('https://ru.site.io/js/publishertag.js',
      'ru-site-io-js-publishertag_files')
 ])
-def test_get_local_name_folderes(url, mode, output):
-    assert output == get_local_name(url, mode)
+def test_get_foldername(url, output):
+    assert output == get_foldername(url)

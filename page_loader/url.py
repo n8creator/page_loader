@@ -55,9 +55,11 @@ def url_to_string(url: str) -> str:
     return replace_chars(output)
 
 
-def get_local_name(url: str, mode, ext: str = 'html'):
-    """Return local name for file or for a folder with extension."""
-    if mode == 'file':
-        return f'{url_to_string(url)}.{ext}'
-    if mode == 'folder':
-        return f'{url_to_string(url)}_files'
+def get_filename(url: str, ext: str = 'html'):
+    """Return local name for file with extension."""
+    return f'{url_to_string(url)}.{ext}'
+
+
+def get_foldername(url: str):
+    """Return local name for folder."""
+    return f'{url_to_string(url)}_files'
