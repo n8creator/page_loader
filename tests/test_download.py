@@ -2,35 +2,36 @@ import os
 import pytest
 import tempfile
 import requests_mock
+from pathlib import PurePath as PP
 from page_loader import download
 from page_loader.file import read_file
 from page_loader.links import get_absolute_link
 
 
 URL = 'https://ru.hexlet.io/professions'
-FIXTURES_PATH = 'tests/fixtures/'
+FIXTURES_PATH = PP('tests/fixtures/')
 
-INPUT_FIXTURE = 'inputs/ru-hexlet-io-professions.html'
+INPUT_FIXTURE = PP('inputs/ru-hexlet-io-professions.html')
 INPUT_ASSETS = [  # (asset_hyperlink, asset_local_path)
-    ('assets/frontend.png', 'inputs/assets/frontend.png'),
-    ('assets/python.png', 'inputs/assets/python.png'),
-    ('favicon.ico', 'inputs/favicon.ico'),
-    ('assets/application.css', 'inputs/assets/application.css'),
-    ('https://ru.hexlet.io/professions', 'inputs/ru-hexlet-io-professions.html'),  # noqa
-    ('assets/application.js', 'inputs/assets/application.js'),
-    ('/', 'inputs/ru-hexlet-io-professions.html'),
+    ('assets/frontend.png', PP('inputs/assets/frontend.png')),
+    ('assets/python.png', PP('inputs/assets/python.png')),
+    ('favicon.ico', PP('inputs/favicon.ico')),
+    ('assets/application.css', PP('inputs/assets/application.css')),
+    ('https://ru.hexlet.io/professions', PP('inputs/ru-hexlet-io-professions.html')),  ## noqa
+    ('assets/application.js', PP('inputs/assets/application.js')),
+    ('/', PP('inputs/ru-hexlet-io-professions.html')),
 ]
 
-EXPECTED_FIXTURE = 'expected/ru-hexlet-io-professions.html'
-EXPECTED_FILENAME = 'ru-hexlet-io-professions.html'
+EXPECTED_FIXTURE = PP('expected/ru-hexlet-io-professions.html')
+EXPECTED_FILENAME = PP('ru-hexlet-io-professions.html')
 EXPECTED_ASSETS = [
-    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png',
-    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-python.png',
-    'ru-hexlet-io-professions_files/ru-hexlet-io-favicon.ico',
-    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.css',
-    'ru-hexlet-io-professions_files/ru-hexlet-io-professions.html',
-    'ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.js',
-    'ru-hexlet-io-professions.html'
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png'),
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-assets-python.png'),
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-favicon.ico'),
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.css'),
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-professions.html'),
+    PP('ru-hexlet-io-professions_files/ru-hexlet-io-assets-application.js'),
+    PP('ru-hexlet-io-professions.html'),
 ]
 
 
