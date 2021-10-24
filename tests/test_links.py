@@ -8,6 +8,7 @@ from page_loader.links import get_links, filter_links_in_domain
 FIXTURES_PATH = 'tests/fixtures/inputs/'
 
 
+# test filter_links_in_domain() function
 @pytest.mark.parametrize('url, links_tags, output', [
     (
         'https://ru.hexlet.io/professions',
@@ -31,6 +32,7 @@ def test_filter_links_in_domain(url, links_tags, output):
     assert output == filter_links_in_domain(links_tags=links_tags, url=url)
 
 
+# test get_abs_link() page
 @pytest.mark.parametrize('page_url, link, expected', [
     ('https://site.io/page',
      '/assets/favicon.ico',
@@ -49,6 +51,7 @@ def test_get_absolute_link(page_url, link, expected):
     assert expected == get_abs_link(page_url=page_url, local_link=link)
 
 
+# test get_links() page
 @pytest.mark.parametrize('url, fixture, tag_meta, output', [
     ('https://ru.hexlet.io/professions',  # url
      'ru-hexlet-io-professions.html',  # fixture
@@ -56,12 +59,24 @@ def test_get_absolute_link(page_url, link, expected):
       'link': 'href',
       'script': 'src'},
      [
-         ('assets/frontend.png', 'img'),  # output
-         ('assets/python.png', 'img'),
-         ('favicon.ico', 'link'),
-         ('assets/application.css', 'link'),
-         ('https://ru.hexlet.io/professions', 'link'),
-         ('assets/application.js', 'script'),
+         {'fact_link': 'assets/frontend.png',  # output
+          'abs_link': 'https://ru.hexlet.io/assets/frontend.png',
+          'tag': 'img'},
+         {'fact_link': 'assets/python.png',
+          'abs_link': 'https://ru.hexlet.io/assets/python.png',
+          'tag': 'img'},
+         {'fact_link': 'favicon.ico',
+          'abs_link': 'https://ru.hexlet.io/favicon.ico',
+          'tag': 'link'},
+         {'fact_link': 'assets/application.css',
+          'abs_link': 'https://ru.hexlet.io/assets/application.css',
+          'tag': 'link'},
+         {'fact_link': 'https://ru.hexlet.io/professions',
+          'abs_link': 'https://ru.hexlet.io/professions',
+          'tag': 'link'},
+         {'fact_link': 'assets/application.js',
+          'abs_link': 'https://ru.hexlet.io/assets/application.js',
+          'tag': 'script'},
      ]
      ),
 ])

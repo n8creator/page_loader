@@ -1,5 +1,6 @@
 import os
 from bs4 import BeautifulSoup
+from operator import itemgetter
 from page_loader.logger import logger
 from progress.bar import IncrementalBar
 from page_loader.editor import edit_soup
@@ -28,40 +29,45 @@ def download(url, path=DEFAULT_PATH):
 
     # Edit Soup object and replace links to loclal files
     if links:
-        # Generate folder_name and create directory (if doesn't exist)
+        # Generate folder name and path
         folder_name = get_foldername(url=url)
         folder_path = get_full_path(path, folder_name)
+
+        # Create output directory (id doesn't exist)
         if not os.path.isdir(folder_path):
             create_dir(local_path=folder_path)
 
         to_download = []  # Initiate download queue
 
-        # Iterate links and edit Soup object
-        for link, tag in links:
-            # Generate 'absolute_url' to load and 'file_name' for item
-            absolute_url = get_abs_link(page_url=url, local_link=link)
-            file_name = get_filename(url=absolute_url)
+        # Iterate links and edit soup object
+        for link_dict in links:
+            # Destructure link's dict
+            fact_link, abs_link, tag = itemgetter(
+                'fact_link', 'abs_link', 'tag')(link_dict)
 
-            # Generate local path & local link for item
+            # Generate file_name, local path & local link for item
+            file_name = get_filename(url=abs_link)
             local_path = get_full_path(path, folder_name, file_name)
             local_link = get_full_path(folder_name, file_name)
-            soup = edit_soup(url=link, tag=tag, meta=ASSET_TAGS[tag],
+
+            # Edit soup object
+            soup = edit_soup(url=fact_link, tag=tag, meta=ASSET_TAGS[tag],
                              local_link=local_link, soup=soup)
 
             # Add asset's absolute url and local_path into queue
-            to_download.append((absolute_url, local_path))
+            to_download.append((abs_link, local_path))
 
     # Save modified soup
     save_file(data=soup.prettify(), local_path=file_path, mode='w')
 
     # Initiate progress bar and download assets
     progress_bar = IncrementalBar('Loading resourses:', max=len(to_download))
-    for absolute_url, local_path in to_download:
+    for abs_link, local_path in to_download:
         try:
-            content = make_request(absolute_url)
+            content = make_request(abs_link)
             save_file(data=content, local_path=local_path)
         except Exception:
-            logger.error(f'Asset \'{link}\' was not downloaded.')
+            logger.error(f'Asset \'{abs_link}\' was not downloaded.')
         progress_bar.next()  # Iterate progress bar
 
     # Finish progess_bar & return output's file path
