@@ -32,18 +32,14 @@ def test_url_to_string(url, output):
 
 
 # Test get_filename() function
-@pytest.mark.parametrize('url, ext, output', [
-    ('https://site.io/blog/page.php', 'php',
-     'site-io-blog-page.php'),
-    ('/templates/skin/banner_desktop.js?2689', 'js',
-     'templates-skin-banner-desktop.js'),
-    ('https://site.io/pcode/page/', 'html',
-     'site-io-pcode-page.html'),
-    ('https://ru.site.io/js/publishertag.js', 'js',
-     'ru-site-io-js-publishertag.js')
+@pytest.mark.parametrize('url, output', [
+    ('https://site.io/blog/page.php', 'site-io-blog-page.php'),
+    ('/temp/skin/banner_desktop.js?2689', 'temp-skin-banner-desktop.js'),
+    ('https://site.io/pcode/page/', 'site-io-pcode-page.html'),
+    ('https://ru.site.io/js/publishertag.js', 'ru-site-io-js-publishertag.js')
 ])
-def test_get_filename(url, ext, output):
-    assert output == get_filename(url=url, ext=ext)
+def test_get_filename(url, output):
+    assert output == get_filename(url=url)
 
 
 # Test get_foldername()

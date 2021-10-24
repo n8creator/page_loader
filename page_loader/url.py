@@ -1,5 +1,5 @@
-from urllib.parse import urlparse
 import re
+from urllib.parse import urlparse
 
 
 def parse_url(url: str) -> dict:
@@ -49,14 +49,25 @@ def split_path_and_ext(path: str) -> dict:
 
 def url_to_string(url: str) -> str:
     """Convert URL into formatted string."""
+    # Parse URL into parameters
     p = parse_url(url)
-    path_without_ext = split_path_and_ext(p['path'])['path']
-    output = ''.join([p['netloc'], path_without_ext])
+    netloc, path = p['netloc'], p['path']
+
+    # Get sub-path without extension
+    subpath = split_path_and_ext(path)['path']
+
+    # Get pre-formatted string and replace all chars in it
+    output = ''.join([netloc, subpath])
     return replace_chars(output)
 
 
-def get_filename(url: str, ext: str = 'html'):
+def get_filename(url: str):
     """Return local name for file with extension."""
+    # Parse path from url and get extsnsion
+    p = parse_url(url)['path']
+    ext = split_path_and_ext(p)['ext']
+
+    # Return formatted output
     return f'{url_to_string(url)}.{ext}'
 
 
