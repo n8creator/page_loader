@@ -28,9 +28,11 @@ def download(url, path=DEFAULT_PATH):
 
     # Edit Soup object and replace links to loclal files
     if links:
-        # Generate folder_name and create directory
+        # Generate folder_name and create directory (if doesn't exist)
         folder_name = get_foldername(url=url)
-        create_dir(local_path=get_full_path(path, folder_name))
+        folder_path = get_full_path(path, folder_name)
+        if not os.path.isdir(folder_path):
+            create_dir(local_path=folder_path)
 
         to_download = []  # Initiate download queue
 
