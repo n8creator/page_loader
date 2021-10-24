@@ -1,11 +1,10 @@
 import os
 import pytest
-import requests
 import tempfile
 import requests_mock
+from page_loader.file import get_full_path
 from pathlib import PurePath as PP
 from page_loader import download
-from page_loader.file import read_file
 from page_loader.links import get_abs_link
 
 
@@ -16,7 +15,7 @@ INPUT_FIXTURE = PP('inputs/ru-hexlet-io-professions.html')
 EXPECTED_FIXTURE = PP('expected/ru-hexlet-io-professions.html')
 EXPECTED_FILENAME = PP('ru-hexlet-io-professions.html')
 
-ASSETS = [  # (link, local_path, expected_file)
+ASSETS = [  # (link, fixture_path, expected_file)
     ('assets/frontend.png',
      PP('inputs/assets/frontend.png'),
      PP('ru-hexlet-io-professions_files/ru-hexlet-io-assets-frontend.png'),
@@ -44,6 +43,13 @@ ASSETS = [  # (link, local_path, expected_file)
 ]
 
 
+def read_file(file_path, mode='r', encoding=None):
+    """Read & return data from some file at given 'file_path'."""
+    with open(file_path, mode, encoding=encoding) as file:
+        data = file.read()
+    return data
+
+
 def test_download():
     with tempfile.TemporaryDirectory() as temp_dir:
         with requests_mock.Mocker() as mock:
@@ -52,10 +58,10 @@ def test_download():
             mock.get(URL, text=html)
 
             # create mock's for all assets
-            for link, local_path, _ in ASSETS:
+            for link, fixture_path, _ in ASSETS:
                 asset_link = get_abs_link(page_url=URL, local_link=link)
 
-                asset_fixture_path = os.path.join(FIXTURES_PATH, local_path)
+                asset_fixture_path = os.path.join(FIXTURES_PATH, fixture_path)
                 bytecode = read_file(file_path=asset_fixture_path, mode='rb')
                 mock.get(asset_link, content=bytecode)
 
@@ -68,14 +74,16 @@ def test_download():
             assert expected == downloaded
 
             # assert if expected assets exists in temp folder
-            for _, _, expected_asset in ASSETS:
-                assert os.path.exists(f'{temp_dir}/{expected_asset}') is True
+            for _, _, expected_file in ASSETS:
+                assert os.path.exists(f'{temp_dir}/{expected_file}') is True
 
             # assert if asset's content equals to asset's fixture
-            for link, _, expected_asset in ASSETS:
-                asset_link = get_abs_link(page_url=URL, local_link=link)
-                assert requests.get(asset_link).content == read_file(
-                    os.path.join(temp_dir, expected_asset), mode='rb')
+            for _, fixture_path, expected_file in ASSETS:
+                fixture = read_file(get_full_path(FIXTURES_PATH, fixture_path),
+                                    mode='rb')
+                expected = read_file(get_full_path(temp_dir, expected_file),
+                                     mode='rb')
+                assert fixture == expected
 
 
 @pytest.mark.parametrize('status_code', [

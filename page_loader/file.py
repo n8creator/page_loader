@@ -13,17 +13,6 @@ def save_file(data, local_path, mode='wb'):
         raise OSError(err)
 
 
-def read_file(file_path, mode='r', encoding=None):
-    """Read & return data from some file at given 'file_path'."""
-    try:
-        with open(file_path, mode, encoding=encoding) as file:
-            data = file.read()
-        return data
-    except OSError as err:
-        logger.error(err)
-        raise OSError(err)
-
-
 def create_dir(local_path: str):
     """Create new directory at 'local_path' or throw exception."""
     try:
